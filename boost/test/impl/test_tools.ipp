@@ -345,7 +345,9 @@ check_impl( predicate_result const& pr, lazy_ostream const& assertion_descr,
 
         framework::test_unit_aborted( framework::current_test_case() );
 
+#ifndef BOOST_NO_EXCEPTIONS
         throw execution_aborted();
+#endif
     }
 
     return true;

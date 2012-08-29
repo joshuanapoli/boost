@@ -101,6 +101,9 @@ namespace detail {
     // Explicitly iterating
     template<template <class T1, class T2> class F, class V, class T>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+inline
+#endif
     void iterating_vector_assign_scalar (V &v, const T &t) {
         typedef F<typename V::iterator::reference, T> functor_type;
         typedef typename V::difference_type difference_type;
@@ -117,6 +120,9 @@ namespace detail {
     // Explicitly case
     template<template <class T1, class T2> class F, class V, class T>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+inline
+#endif
     void indexing_vector_assign_scalar (V &v, const T &t) {
         typedef F<typename V::reference, T> functor_type;
         typedef typename V::size_type size_type;
@@ -133,6 +139,9 @@ namespace detail {
     // Dense (proxy) case
     template<template <class T1, class T2> class F, class V, class T>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+inline
+#endif
     void vector_assign_scalar (V &v, const T &t, dense_proxy_tag) {
 #ifdef BOOST_UBLAS_USE_INDEXING
         indexing_vector_assign_scalar<F> (v, t);
@@ -150,6 +159,9 @@ namespace detail {
     // Packed (proxy) case
     template<template <class T1, class T2> class F, class V, class T>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+inline
+#endif
     void vector_assign_scalar (V &v, const T &t, packed_proxy_tag) {
         typedef F<typename V::iterator::reference, T> functor_type;
         typedef typename V::difference_type difference_type;
@@ -161,6 +173,9 @@ namespace detail {
     // Sparse (proxy) case
     template<template <class T1, class T2> class F, class V, class T>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+inline
+#endif
     void vector_assign_scalar (V &v, const T &t, sparse_proxy_tag) {
         typedef F<typename V::iterator::reference, T> functor_type;
         typename V::iterator it (v.begin ());
@@ -256,6 +271,9 @@ namespace detail {
     // Explicitly indexing
     template<template <class T1, class T2> class F, class V, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+    inline
+#endif
     void indexing_vector_assign (V &v, const vector_expression<E> &e) {
         typedef F<typename V::reference, typename E::value_type> functor_type;
         typedef typename V::size_type size_type;
@@ -272,6 +290,9 @@ namespace detail {
     // Dense (proxy) case
     template<template <class T1, class T2> class F, class V, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+    inline
+#endif
     void vector_assign (V &v, const vector_expression<E> &e, dense_proxy_tag) {
 #ifdef BOOST_UBLAS_USE_INDEXING
         indexing_vector_assign<F> (v, e);
@@ -289,6 +310,9 @@ namespace detail {
     // Packed (proxy) case
     template<template <class T1, class T2> class F, class V, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+    inline
+#endif
     void vector_assign (V &v, const vector_expression<E> &e, packed_proxy_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F<typename V::iterator::reference, typename E::value_type> functor_type;
@@ -345,6 +369,9 @@ namespace detail {
     // Sparse case
     template<template <class T1, class T2> class F, class V, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+    inline
+#endif
     void vector_assign (V &v, const vector_expression<E> &e, sparse_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F<typename V::iterator::reference, typename E::value_type> functor_type;
@@ -373,6 +400,9 @@ namespace detail {
     // Sparse proxy or functional case
     template<template <class T1, class T2> class F, class V, class E>
     // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.
+#ifdef _TMS320C6X
+    inline
+#endif
     void vector_assign (V &v, const vector_expression<E> &e, sparse_proxy_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F<typename V::iterator::reference, typename E::value_type> functor_type;

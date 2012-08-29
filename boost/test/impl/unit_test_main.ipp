@@ -83,7 +83,9 @@ unit_test_main( init_unit_test_func init_func, int argc, char* argv[] )
 {
     int result_code = 0;
 
+#ifndef BOOST_NO_EXCEPTIONS
     try {
+#endif
         framework::init( init_func, argc, argv );
 
         if( runtime_config::list_content() ) {
@@ -108,6 +110,7 @@ unit_test_main( init_unit_test_func init_func, int argc, char* argv[] )
         result_code = runtime_config::no_result_code() 
                         ? boost::exit_success
                         : results_collector.results( framework::master_test_suite().p_id ).result_code();
+#ifndef BOOST_NO_EXCEPTIONS
     }
     catch( framework::nothing_to_test const& ) {
         result_code = boost::exit_success;
@@ -131,6 +134,7 @@ unit_test_main( init_unit_test_func init_func, int argc, char* argv[] )
     framework::shutdown();
 
     return result_code;
+#endif
 }
 
 } // namespace unit_test

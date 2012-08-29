@@ -289,12 +289,16 @@ public:
     // translator holder interface
     virtual int operator()( boost::function<int ()> const& F )
     {
+#ifndef BOOST_NO_EXCEPTIONS
         try {
+#endif
             return m_next ? (*m_next)( F ) : F();
+#ifndef BOOST_NO_EXCEPTIONS
         } catch( ExceptionType const& e ) {
             m_translator( e );
             return boost::exit_exception_failure;
         }
+#endif
     }
 #ifndef BOOST_NO_RTTI
     virtual translator_holder_base_ptr erase( translator_holder_base_ptr this_, std::type_info const& ti ) 

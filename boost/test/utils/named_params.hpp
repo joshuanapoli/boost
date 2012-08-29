@@ -54,7 +54,9 @@ struct access_to_invalid_parameter {};
 inline void 
 report_access_to_invalid_parameter()
 {
+#ifndef BOOST_NO_EXCEPTIONS
     throw access_to_invalid_parameter();
+#endif
 }
 
 //____________________________________________________________________________//

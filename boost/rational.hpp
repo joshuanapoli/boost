@@ -311,7 +311,7 @@ rational<IntType>& rational<IntType>::operator/= (const rational<IntType>& r)
 
     // Trap division by zero
     if (r_num == zero)
-        throw bad_rational();
+        throw_exception( bad_rational() );
     if (num == zero)
         return *this;
 
@@ -499,7 +499,7 @@ void rational<IntType>::normalize()
     IntType zero(0);
 
     if (den == zero)
-        throw bad_rational();
+        throw_exception( bad_rational() );
 
     // Handle the case of zero separately, to avoid division by zero
     if (num == zero) {

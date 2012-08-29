@@ -45,8 +45,10 @@ class progress_timer : public timer, private noncopyable
   //  B) The progress_timer destructor does output which may throw.
   //  C) A progress_timer is usually not critical to the application.
   //  Therefore, wrap the I/O in a try block, catch and ignore all exceptions.
+#ifndef BOOST_NO_EXCEPTIONS
     try
     {
+#endif
       // use istream instead of ios_base to workaround GNU problem (Greg Chicares)
       std::istream::fmtflags old_flags = m_os.setf( std::istream::fixed,
                                                    std::istream::floatfield );
@@ -55,9 +57,11 @@ class progress_timer : public timer, private noncopyable
                         << std::endl;
       m_os.flags( old_flags );
       m_os.precision( old_prec );
+#ifndef BOOST_NO_EXCEPTIONS
     }
 
     catch (...) {} // eat any exceptions
+#endif
   } // ~progress_timer
 
  private:

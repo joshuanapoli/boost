@@ -37,7 +37,9 @@ namespace unit_test {
 unit_test_monitor_t::error_level
 unit_test_monitor_t::execute_and_translate( boost::function<void ()> const& func, unsigned timeout )
 {
+#ifndef BOOST_NO_EXCEPTIONS
     try {
+#endif
         p_catch_system_errors.value     = runtime_config::catch_sys_errors();
         p_timeout.value                 = timeout;
         p_auto_start_dbg.value          = runtime_config::auto_start_dbg();
@@ -45,6 +47,7 @@ unit_test_monitor_t::execute_and_translate( boost::function<void ()> const& func
         p_detect_fp_exceptions.value    = runtime_config::detect_fp_exceptions();
 
         vexecute( func );
+#ifndef BOOST_NO_EXCEPTIONS
     }
     catch( execution_exception const& ex ) {
         framework::exception_caught( ex );
@@ -63,6 +66,7 @@ unit_test_monitor_t::execute_and_translate( boost::function<void ()> const& func
         }
     }
 
+#endif
     return test_ok;
 }
 

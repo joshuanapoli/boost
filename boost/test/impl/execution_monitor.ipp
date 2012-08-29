@@ -1176,11 +1176,14 @@ execution_monitor::execute( boost::function<int ()> const& F )
     if( debug::under_debugger() )
         p_catch_system_errors.value = false;
 
+#ifndef BOOST_NO_EXCEPTIONS
     try {
         detail::fpe_except_guard G( p_detect_fp_exceptions );
         unit_test::ut_detail::ignore_unused_variable_warning( G );
 
+#endif
         return catch_signals( F );
+#ifndef BOOST_NO_EXCEPTIONS
     }
 
     //  Catch-clause reference arguments are a bit different from function
@@ -1262,6 +1265,7 @@ execution_monitor::execute( boost::function<int ()> const& F )
     // unknown error
     catch( ... )
       { detail::report_error( execution_exception::cpp_exception_error, "unknown type" ); }
+#endif
 
     return 0;  // never reached; supplied to quiet compiler warnings
 } // execute

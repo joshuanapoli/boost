@@ -13,11 +13,13 @@
 //  configuration policy:
 //
 
+#ifdef _TMS320C6X
+
 // define this to locate a compiler config file:
-// #define BOOST_COMPILER_CONFIG <myheader>
+#define BOOST_COMPILER_CONFIG <boost/config/compiler/ti.hpp>
 
 // define this to locate a stdlib config file:
-// #define BOOST_STDLIB_CONFIG   <myheader>
+#define BOOST_STDLIB_CONFIG   <boost/config/stdlib/dinkumware.hpp>
 
 // define this to locate a platform config file:
 // #define BOOST_PLATFORM_CONFIG <myheader>
@@ -32,7 +34,7 @@
 
 // define this to disable platform config,
 // use if your platform config has nothing to set:
-// #define BOOST_NO_PLATFORM_CONFIG
+#define BOOST_NO_PLATFORM_CONFIG
 
 // define this to disable all config options,
 // excluding the user config.  Use if your
@@ -54,8 +56,7 @@
 // with an #error if it encounters anything unknown --
 // either an unknown compiler version or an unknown
 // compiler/platform/library:
-// #define BOOST_ASSERT_CONFIG
-
+#define BOOST_ASSERT_CONFIG
 
 // define if you want to disable threading support, even
 // when available:
@@ -120,5 +121,4 @@
 // that feature off.
 // #define BOOST_WHATEVER_NO_LIB
  
-
-
+#endif

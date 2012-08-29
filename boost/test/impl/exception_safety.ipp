@@ -390,7 +390,9 @@ exception_safety_tester::failure_point()
     if( m_exec_path_counter == m_break_exec_path )
         debug::debugger_break();
     
+#ifndef BOOST_NO_EXCEPTIONS
     throw unique_exception();
+#endif
 }
 
 //____________________________________________________________________________//
@@ -514,11 +516,15 @@ exception_safety( boost::function<void ()> const& F, const_string test_name )
     exception_safety_tester est( test_name );
 
     do {
+ #ifndef BOOST_NO_EXCEPTIONS
         try {
+ #endif
             F();
+#ifndef BOOST_NO_EXCEPTIONS
         }
         catch( exception_safety_tester::unique_exception const& ) {}
 
+#endif
     } while( est.next_execution_path() );
 }
 

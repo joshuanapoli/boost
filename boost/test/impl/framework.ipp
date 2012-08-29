@@ -395,8 +395,10 @@ public:
         BOOST_TEST_REVERSE_FOREACH( test_observer*, to, m_observers )
             to->test_unit_finish( tu, elapsed );
 
+#ifndef BOOST_NO_EXCEPTIONS
         if( unit_test_monitor.is_critical_error( run_result ) )
             throw framework::test_being_aborted();
+#endif
     }
 
     // test_tree_visitor interface implementation
@@ -669,12 +671,17 @@ init( init_unit_test_func init_func, int argc, char* argv[] )
     master_test_suite().argc = argc;
     master_test_suite().argv = argv;
 
+#ifndef BOOST_NO_EXCEPTIONS
     try {
+#endif
         s_frk_impl().m_aux_em.vexecute( boost::bind( &ut_detail::invoke_init_func, init_func ) );
+
+#ifndef BOOST_NO_EXCEPTIONS
     }
     catch( execution_exception const& ex )  {
         throw setup_error( ex.what() );
     }
+#endif
 
     // Apply all decorators to the auto test units
     class apply_decorators : public test_tree_visitor {
@@ -986,8 +993,10 @@ get( test_unit_id id, test_unit_type t )
 {
     test_unit* res = s_frk_impl().m_test_units[id];
 
+#ifndef BOOST_NO_EXCEPTIONS
     if( (res->p_type & t) == 0 )
         throw internal_error( "Invalid test unit type" );
+#endif
 
     return *res;
 }
@@ -1018,12 +1027,16 @@ run( test_unit_id id, bool continue_test )
 
     if( call_start_finish ) {
         BOOST_TEST_FOREACH( test_observer*, to, s_frk_impl().m_observers ) {
+#ifndef BOOST_NO_EXCEPTIONS
             try {
+#endif
                 s_frk_impl().m_aux_em.vexecute( boost::bind( &test_observer::test_start, to, tcc.p_count ) );
+#ifndef BOOST_NO_EXCEPTIONS
             }
             catch( execution_exception const& ex )  {
                 throw setup_error( ex.what() );
             }
+#endif
         }
     }
 
@@ -1041,12 +1054,16 @@ run( test_unit_id id, bool continue_test )
         std::srand( runtime_config::random_seed() );
     }
 
+#ifndef BOOST_NO_EXCEPTIONS
     try {
+#endif
         traverse_test_tree( id, s_frk_impl() );
+#ifndef BOOST_NO_EXCEPTIONS
     }
     catch( framework::test_being_aborted const& ) {
         // abort already reported
     }
+#endif
 
     if( call_start_finish ) {
         BOOST_TEST_REVERSE_FOREACH( test_observer*, to, s_frk_impl().m_observers )
