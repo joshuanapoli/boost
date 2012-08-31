@@ -1,3 +1,10 @@
 bin.v2/
 pattern.temp2
 pattern.test
+*.pyc
+tools/build/v2/bootstrap.log
+tools/build/v2/engine/bin.*/
+tools/build/v2/engine/bootstrap/
+tools/build/v2/test/bjam.exe
+tools/build/v2/test/failed_test/
+tools/build/v2/test/test_results.txt
