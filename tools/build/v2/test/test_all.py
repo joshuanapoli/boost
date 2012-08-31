@@ -279,6 +279,7 @@ if os.name == "posix":
 
 if toolset.startswith("gcc"):
     tests.append("gcc_runtime")
+    tests.append("gcc_linker_script")
 
 if toolset.startswith("gcc") or toolset.startswith("msvc"):
     tests.append("pch")
