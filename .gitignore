@@ -8,3 +8,4 @@ tools/build/v2/engine/bootstrap/
 tools/build/v2/test/bjam.exe
 tools/build/v2/test/failed_test/
 tools/build/v2/test/test_results.txt
+stage/
