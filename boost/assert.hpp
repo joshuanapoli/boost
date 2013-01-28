@@ -79,7 +79,20 @@ namespace boost
   #ifndef BOOST_ASSERT_HPP
     #define BOOST_ASSERT_HPP
     #include <cstdlib>
+#ifdef BOOST_NO_IOSTREAM
+#include <cstdint>
+#include <chrono>
+int print(char c);
+int print(const char* message);
+int print(const char* first, const char* last);
+int print_hex(unsigned char byte);
+void print_hex(const char* first, const char* last);
+int print_ptr(void* ptr);
+void print( std::chrono::milliseconds t );
+int print_dec( std::uint32_t x );
+#else
     #include <iostream>
+#endif
     #include <boost/current_function.hpp>
 
     //  IDE's like Visual Studio perform better if output goes to std::cout or
@@ -97,10 +110,16 @@ namespace boost
           inline void assertion_failed_msg(char const * expr, char const * msg, char const * function,
             char const * file, long line)
           {
+#ifdef BOOST_NO_IOSTREAM
+            print( "***** Internal Program Error - assertion (" );
+            print( expr );
+            print( ")\n" );
+#else
             BOOST_ASSERT_MSG_OSTREAM
               << "***** Internal Program Error - assertion (" << expr << ") failed in "
               << function << ":\n"
               << file << '(' << line << "): " << msg << std::endl;
+#endif
 			#ifdef UNDER_CE
 				// The Windows CE CRT library does not have abort() so use exit(-1) instead.
 				std::exit(-1);
