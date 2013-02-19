@@ -1,16 +1,3 @@
 project site-config ;
 alias cmsis : : : : <include>c:/MinGW/msys/1.0/opt/arm/CMSIS/Include ;
 alias cmsis-cm3 : cmsis : : : <include>c:/MinGW/msys/1.0/opt/arm/Device/ARM/ARMCM3/Include ;
-lib lpc17xxx-drivers
-  : # sources
-    [ glob c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Drivers/source/*.c ]
-    c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Core/CM3/DeviceSupport/NXP/LPC17xx/system_LPC17xx.c
-  : # requirements
-    <include>c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Core/CM3/CoreSupport
-    <include>c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Core/CM3/DeviceSupport/NXP/LPC17xx
-    <include>c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Drivers/include
-  : # default-build
-  : # usage-requiremens
-    <include>c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Drivers/include
-    <include>c:/MinGW/msys/1.0/opt/nxp/lpc17xx.cmsis.driver.library/Core/CM3/DeviceSupport/NXP/LPC17xx
-  ;

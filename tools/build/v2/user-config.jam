@@ -21,5 +21,3 @@ using gcc
   ;
 
 using msvc ;
-
-use-project /boost : c:/MinGW/msys/1.0/opt/symbotic/firmware/src/boost ;
