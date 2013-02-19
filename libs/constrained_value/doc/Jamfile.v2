@@ -1,0 +1,66 @@
+# Version: 2.3
+# Date:    2008.11.30
+#
+# This file is a part of the Boost Constrained Value library.
+# See http://www.boost.org/libs/constrained_value/ for library home page.
+#
+# Copyright (C) 2004-2008 Robert Kawulak (Robert.Kawulak.at.gmail.com).
+# Distributed under the Boost Software License, Version 1.0 (see accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt).
+
+using boostbook ;
+import quickbook ;
+import doxygen ;
+
+boostbook constrained_value-doc
+    :
+        src/constrained_value.qbk
+    :
+        # values to use for docs nested in Boost directory structure
+        <xsl:param>boost.root=../../../..
+        <xsl:param>boost.libraries=../../../libraries.htm
+        <xsl:param>html.stylesheet=../../../../doc/html/boostbook.css
+
+        # values to use for stand-alone docs
+        #<xsl:param>boost.root=http://www.boost.org
+        #<xsl:param>boost.libraries=http://www.boost.org/libs/libraries.htm
+        #<xsl:param>html.stylesheet=http://www.boost.org/doc/html/boostbook.css
+    ;
+
+install html/constrained_value
+    :
+        src/reference.html
+    :
+        <dependency>constrained_value-doc
+    ;
+
+doxygen reference.html
+    :
+        [ glob ../../../boost/constrained_value.hpp ]
+        [ glob ../../../boost/constrained_value/*.hpp ]
+    :
+        <doxygen:param>"PROJECT_NAME=\"The Boost Constrained Value Library\""
+        <doxygen:param>STRIP_FROM_PATH=$(BOOST_ROOT)
+        <doxygen:param>STRIP_FROM_INC_PATH=$(BOOST_ROOT)
+        <doxygen:param>JAVADOC_AUTOBRIEF=YES
+        <doxygen:param>EXTRACT_STATIC=YES
+        <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+        <doxygen:param>HIDE_SCOPE_NAMES=YES
+        <doxygen:param>INLINE_INFO=NO
+        <doxygen:param>SORT_MEMBER_DOCS=NO
+        <doxygen:param>SHOW_DIRECTORIES=YES
+        <doxygen:param>SOURCE_BROWSER=YES
+        <doxygen:param>REFERENCED_BY_RELATION=NO
+        <doxygen:param>REFERENCES_RELATION=NO
+        <doxygen:param>REFERENCES_LINK_SOURCE=NO
+        <doxygen:param>VERBATIM_HEADERS=NO
+        <doxygen:param>ENABLE_PREPROCESSING=YES
+        <doxygen:param>MACRO_EXPANSION=YES
+        <doxygen:param>EXPAND_ONLY_PREDEF=YES
+        <doxygen:param>"PREDEFINED=BOOST_DEDUCED_TYPENAME:=typename \\
+                       \"BOOST_STATIC_CONSTANT(T,A):=static const T A\""
+        <doxygen:param>EXPAND_AS_DEFINED=BOOST_DEFINE_CONSTRAINED_ASSIGNMENT_OPERATOR
+        <doxygen:param>HIDE_UNDOC_RELATIONS=NO
+        <doxygen:param>QUIET=YES
+        <doxygen:param>WARN_IF_DOC_ERROR=YES
+    ;

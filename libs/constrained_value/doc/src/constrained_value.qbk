@@ -1,0 +1,278 @@
+[article The Boost Constrained Value library
+    [quickbook 1.4]
+    [id constrained_value]
+    [copyright 2004-2008 Robert Kawulak (Robert.Kawulak.at.gmail.com)]
+    [authors [Kawulak, Robert]]
+    [license Distributed under the Boost Software License, Version 1.0 (see accompanying file LICENSE_1_0.txt or copy at [@http://www.boost.org/LICENSE_1_0.txt]).]
+    [last-revision $Date: 2008/11/30 12:00:00$]
+]
+
+
+
+[/ macros for references to documentation]
+
+[/ file references]
+
+[def LINK_constrained_value_hpp        [@reference/constrained__value_8hpp.html                                 <boost/constrained_value.hpp>]]
+[def LINK_files                        [@reference/files.html                                                   files]]
+
+[/ class references]
+
+[def LINK_bounded                      [@reference/structboost_1_1constrained__value_1_1bounded.html            bounded]]
+[def LINK_bounded_int                  [@reference/structboost_1_1constrained__value_1_1bounded__int.html       bounded_int]]
+[def LINK_broken_constraint            [@reference/structboost_1_1constrained__value_1_1broken__constraint.html broken_constraint]]
+[def LINK_clip                         [@reference/structboost_1_1constrained__value_1_1clip.html               clip]]
+[def LINK_clipping                     [@reference/structboost_1_1constrained__value_1_1clipping.html           clipping]]
+[def LINK_clipping_int                 [@reference/structboost_1_1constrained__value_1_1clipping__int.html      clipping_int]]
+[def LINK_constrained                  [@reference/classboost_1_1constrained__value_1_1constrained.html         constrained]]
+[def LINK_no_constraint                [@reference/structboost_1_1constrained__value_1_1no__constraint.html     no_constraint]]
+[def LINK_throw_exception              [@reference/structboost_1_1constrained__value_1_1throw__exception.html   throw_exception]]
+[def LINK_unconstrained                [@reference/classboost_1_1constrained__value_1_1unconstrained.html       unconstrained]]
+[def LINK_within_bounds                [@reference/classboost_1_1constrained__value_1_1within__bounds.html      within_bounds]]
+[def LINK_wrap                         [@reference/structboost_1_1constrained__value_1_1wrap.html               wrap]]
+[def LINK_wrapping                     [@reference/structboost_1_1constrained__value_1_1wrapping.html           wrapping]]
+[def LINK_wrapping_int                 [@reference/structboost_1_1constrained__value_1_1wrapping__int.html      wrapping_int]]
+
+[/ function references]
+
+[def LINK_change_constraint            [@reference/constrained__functions_8hpp.html                             change_constraint]]
+[def LINK_change_bounds                [@reference/bounded__functions_8hpp.html                                 change_bounds]]
+[def LINK_change_lower_bound           [@reference/bounded__functions_8hpp.html                                 change_lower_bound]]
+[def LINK_change_upper_bound           [@reference/bounded__functions_8hpp.html                                 change_upper_bound]]
+[def LINK_change_lower_bound_exclusion [@reference/bounded__functions_8hpp.html                                 change_lower_bound_exclusion]]
+[def LINK_change_upper_bound_exclusion [@reference/bounded__functions_8hpp.html                                 change_upper_bound_exclusion]]
+
+[/ references to other Boost libraries]
+
+[def LINK_boost_function               [@../../../function/index.html                                           boost::function]]
+[def LINK_BOOST_THROW_EXCEPTION        [@../../../exception/doc/BOOST_THROW_EXCEPTION.html                      BOOST_THROW_EXCEPTION]]
+[def LINK_boost_mpl_true_              [@../../../mpl/doc/refmanual/bool.html                                   boost::mpl::true_]]
+[def LINK_boost_mpl_false_             [@../../../mpl/doc/refmanual/bool.html                                   boost::mpl::false_]]
+[def LINK_boost_mpl_integral_c         [@../../../mpl/doc/refmanual/integral-c.html                             boost::mpl::integral_c]]
+[def LINK_boost_lambda_1               [@../../../lambda/index.html                                             boost::lambda::_1]]
+[def LINK_Lambda_expressions           [@../../../lambda/index.html                                             Lambda expressions]]
+[def LINK_boost_rational               [@../../../rational/index.html                                           boost::rational]]
+[def LINK_BOOST_STATIC_ASSERT          [@../../../static_assert/index.html                                      BOOST_STATIC_ASSERT]]
+
+
+
+[import examples.cpp]
+
+
+
+[important This is *not an official Boost library* yet. It is prepared for a formal review and therefore contains information stating it is a part of Boost, but it has not yet been formally reviewed nor accepted.]
+
+
+
+[section Motivation]
+
+[ex_motivation]
+
+[endsect]
+
+
+
+[section Introduction]
+
+[section:definitions Basic definitions]
+
+[#constrained_object_def]
+[*['Constrained object]] is a wrapper for another object. It can be used just like the underlying object, with one exception: it can be assigned only a value which conforms to a specified constraint. Thus the set of possible values of a constrained object is a subset of possible values of the underlying object. A constrained object guarantees that its underlying value is constraint-conforming at all times, since its construction until its destruction.
+
+[#bounded_object_def]
+[*['Bounded object]] is a special case of a constrained object -- it allows only for values which belong to a certain range specified by two bounds and an ordering relation. Each of the bounds may be included or excluded from the range of allowed values.
+
+[endsect]
+
+[section Implementation notes]
+
+[heading The library's files]
+
+The library consists of *header files only*, there is no need to either compile or link additional modules. To use the library, it suffices to `#include LINK_constrained_value_hpp` -- the header just includes all the other LINK_files of the library (which are found in the =boost/constrained_value= sub-directory).
+
+[heading Namespaces]
+
+All names defined by this library are placed in [*`::boost::constrained_value`] namespace.
+
+[note For brevity, names used in this documentation omit qualification with `::boost::constrained_value` namespace.]
+
+[heading Exceptions]
+
+All functions in the library are *exception-neutral* and provide *strong guarantee* of exception safety as long as the underlying value type and policies used provide it.
+
+Every function that throws exceptions uses `LINK_BOOST_THROW_EXCEPTION` macro to allow for usage of the library on platforms without exception support.
+
+[heading The EBO usage]
+
+The implementation takes advantage of potential capability of the compiler to perform EBO (the Empty Base-class Optimization), so for example the following expression should be true:
+
+    sizeof( LINK_bounded_int<int, 0, 100>::type ) == sizeof( int )
+
+However, lack of EBO capability may cause constrained objects to have significantly larger size than the corresponding underlying value types.
+
+[/tip When using the Borland compiler, EBO must be explicitly turned on by using the =-Ve= compiler switch.]
+
+[heading Tested compilers]
+
+The library was successfully tested with the following compilers:
+
+* [@http://gcc.gnu.org GCC] 3.4.5 ([@http://www.mingw.org MinGW])
+* [@http://gcc.gnu.org GCC] 4.3.2 ([@http://www.delorie.com/djgpp DJGPP])
+* Microsoft Visual C++ 7.1 ([@http://msdn.microsoft.com/visualc/vctoolkit2003 Microsoft Visual C++ Toolkit 2003])
+* Microsoft Visual C++ 8.0 SP1 ([@http://www.microsoft.com/express/2005 Microsoft Visual C++ 2005 Express Edition])
+
+[endsect]
+
+[section Acknowledgements]
+
+Some of the ideas used in the code were presented in or inspired by posts of users of Usenet groups
+[@http://groups.google.com/group/comp.lang.c++.moderated comp.lang.c++.moderated],
+[@http://groups.google.com/group/comp.std.c++ comp.std.c++] and
+[@news://news.gmane.org/gmane.comp.lib.boost.devel Boost developers' mailing list].
+
+People who have influenced this library are:
+*Alberto Barbati*,
+*Neal Becker*,
+*Paul A. Bristow*,
+*Christopher Diggins*,
+*Jeff Garland*,
+*Peder Holt*,
+*Dan McLeran*,
+*Rob Stewart*,
+*Pavel Vozenilek*,
+and others.
+
+I'd like to thank all the people who were sending their comments and suggestions. You've helped to make this library better and given me a motivation to work on it! Any further [@mailto:Robert.Kawulak.at.gmail.com?subject=The%20Boost%20Constrained%20Value%20library feedback] is very welcome.
+
+[endsect]
+
+[section Revision history]
+
+No history yet -- this is the initial version of the library.
+
+[endsect]
+
+[endsect]
+
+
+
+[section Tutorial]
+
+This section is a step-by-step introduction to the functionality of the library. For more advanced examples of how the library can be used, see [link constrained_value.examples Examples] section.
+
+[section Simple constrained objects]
+[ex_basic]
+[endsect]
+
+[section Changing constraints at runtime]
+[ex_runtime_constraint]
+[endsect]
+
+[section Custom error policies]
+[ex_error_policy]
+[endsect]
+
+[section Bounded objects]
+[ex_bounded]
+[endsect]
+
+[section Bounded objects with open ranges]
+[ex_open_range]
+[endsect]
+
+[section Compile-time fixed bounds]
+[ex_fixed_bounds]
+[endsect]
+
+[section Other error policies for bounded objects]
+[ex_other_bounded]
+[endsect]
+
+[section Using constrained objects in debug mode only]
+[ex_unconstrained]
+[endsect]
+
+[endsect]
+
+
+
+[section Examples]
+
+In this section you will find some more advanced, useful or crazy examples of what can be done using the library. For introductory examples, see [link constrained_value.tutorial Tutorial] section.
+
+[section Bounded-length string]
+[ex_bounded_length_string]
+[endsect]
+
+[section Wrapping iterator]
+[ex_iterator]
+[endsect]
+
+[section Object remembering its past extreme values]
+[ex_with_memory]
+[endsect]
+
+[endsect]
+
+
+
+[section Rationale]
+
+This section contains explanation of some of the design decisions and answers for some typical questions.
+
+[section:overflows Why bounded objects don't protect against arithmetic overflows?]
+
+The short answer is that it's simply not the library's task to handle arithmetic operations' overflows. A bit longer answer is that overflows:
+
+* are separated from the concept of constrained objects (so rather another library should address it),
+* are specific to integral types, while this library is aimed to be universal and not focused on built-in types only,
+* need complicated and platform-dependent solutions.
+
+All the arithmetic operations are forwarded to the value type's native operators and then the result is checked for constraint conformance. Therefore, to avoid overflows you should use a value type that does not overflow or that detects and handles overflows. This could be:
+
+* an infinite precision integer class, like `integer` class described in [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2007/n2143.pdf the proposal] for C++ TR2,
+* a safe integer class which catches and signals all overflows, like `SafeInt` class described [@http://msdn.microsoft.com/en-us/library/ms972705.aspx here].
+
+The problem is that at the moment there's no standard, portable solution. The first isn't standard yet, the second is highly platform-dependent.
+
+[endsect]
+
+[section:no_floats Why C++'s floating point types shouldn't be used with bounded objects?]
+
+Floating point operations in C++ are very different from what one would expect from a numeric type. In particular, quoting [@http://hal.archives-ouvertes.fr/hal-00128124/en/ /The pitfalls of verifying floating-point computations/] by David Monniaux:
+
+[:\[...\] there exist a number of myths of what IEEE-compliance really entails from the point of view of program semantics. We shall discuss the following myths, among others: \[...\] "If `x < 1` tests true at one point, then `x < 1` stays true later if I never modify `x`."]
+
+This is crucial with respect to `LINK_within_bounds` predicate (used as the constraint policy for bounded types), which must return consistent results so `LINK_constrained` class can preserve its invariant. The conclusion is: don't use built-in floating point types with this library (until you _really_ know what you're doing).
+
+If you need to manipulate real numbers as the underlying value type, consider using a fixed\/floating point library which allows for reliable and repeatable comparisons. Note however, that comparison of values of the type used should imply [@http://en.wikipedia.org/wiki/Strict_weak_ordering strict weak ordering], which may not be the case if objects of this type can have the [@http://en.wikipedia.org/wiki/NaN NaN] value.
+
+[endsect]
+
+[section:wrap_clip_closed_range Why `wrap` and `clip` policies don't allow the bounds to be excluded?]
+
+The formula for wrapping a value within an open range would be relatively complicated and the effects could be possibly confusing. But since `LINK_wrap` error policy is implemented for integer-like types only, there always exists a corresponding closed range that can be used instead of an open range.
+
+The `LINK_clip` error policy must be able to assign a value of any of the bounds to a clipping bounded object, hence the bounds must be valid values for such an object and cannot be excluded from the allowed range.
+
+[endsect]
+
+[section:auto_type Why there's no automatic deduction of the underlying type for integral bounded objects?]
+
+Why one can't simply write `bounded_int<-100, 100>::type` and let it figure out the best underlying value type automatically?
+
+The answer is there's no universally /best/ type that can be chosen. For some applications, the less space-consuming type is used the better, while other usages may require some wider type to avoid overflows during specific computations. That's why the choice of the underlying type should always be a conscious decision of the programmer, not left to an automatic mechanism taking only the bounds' values into account.
+
+[endsect]
+
+[endsect]
+
+
+
+[/xinclude ../reference.xml]
+
+[section Reference]
+
+Doxygen-generated reference is available [@reference/index.html here].
+
+[endsect]

@@ -1,0 +1,187 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>The Boost Constrained Value library</title>
+<link rel="stylesheet" href="../../../../doc/html/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="index.html" title="The Boost Constrained Value library">
+<link rel="next" href="constrained_value/introduction.html" title="Introduction">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
+<td align="center"><a href="../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"><a accesskey="n" href="constrained_value/introduction.html"><img src="../../../../doc/html/images/next.png" alt="Next"></a></div>
+<div class="article" lang="en">
+<div class="titlepage">
+<div>
+<div><h2 class="title">
+<a name="constrained_value"></a>The Boost Constrained Value library</h2></div>
+<div><div class="authorgroup"><div class="author"><h3 class="author">
+<span class="firstname">Robert</span> <span class="surname">Kawulak</span>
+</h3></div></div></div>
+<div><p class="copyright">Copyright © 2004 -2008 Robert Kawulak (Robert.Kawulak.at.gmail.com)</p></div>
+<div><div class="legalnotice">
+<a name="id464748"></a><p>
+        Distributed under the Boost Software License, Version 1.0 (see accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>).
+      </p>
+</div></div>
+</div>
+<hr>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="section"><a href="index.html#constrained_value.motivation">Motivation</a></span></dt>
+<dt><span class="section"><a href="constrained_value/introduction.html">Introduction</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="constrained_value/introduction.html#constrained_value.introduction.definitions"> Basic definitions</a></span></dt>
+<dt><span class="section"><a href="constrained_value/introduction.html#constrained_value.introduction.implementation_notes">Implementation
+      notes</a></span></dt>
+<dt><span class="section"><a href="constrained_value/introduction.html#constrained_value.introduction.acknowledgements">Acknowledgements</a></span></dt>
+<dt><span class="section"><a href="constrained_value/introduction.html#constrained_value.introduction.revision_history">Revision
+      history</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="constrained_value/tutorial.html">Tutorial</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.simple_constrained_objects">Simple
+      constrained objects</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.changing_constraints_at_runtime">Changing
+      constraints at runtime</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.custom_error_policies">Custom
+      error policies</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.bounded_objects">Bounded objects</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.bounded_objects_with_open_ranges">Bounded
+      objects with open ranges</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.compile_time_fixed_bounds">Compile-time
+      fixed bounds</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.other_error_policies_for_bounded_objects">Other
+      error policies for bounded objects</a></span></dt>
+<dt><span class="section"><a href="constrained_value/tutorial.html#constrained_value.tutorial.using_constrained_objects_in_debug_mode_only">Using
+      constrained objects in debug mode only</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="constrained_value/examples.html">Examples</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="constrained_value/examples.html#constrained_value.examples.bounded_length_string">Bounded-length
+      string</a></span></dt>
+<dt><span class="section"><a href="constrained_value/examples.html#constrained_value.examples.wrapping_iterator">Wrapping
+      iterator</a></span></dt>
+<dt><span class="section"><a href="constrained_value/examples.html#constrained_value.examples.object_remembering_its_past_extreme_values">Object
+      remembering its past extreme values</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="constrained_value/rationale.html">Rationale</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="constrained_value/rationale.html#constrained_value.rationale.overflows"> Why bounded objects
+      don't protect against arithmetic overflows?</a></span></dt>
+<dt><span class="section"><a href="constrained_value/rationale.html#constrained_value.rationale.no_floats"> Why C++'s floating
+      point types shouldn't be used with bounded objects?</a></span></dt>
+<dt><span class="section"><a href="constrained_value/rationale.html#constrained_value.rationale.wrap_clip_closed_range">
+      Why <code class="computeroutput"><span class="identifier">wrap</span></code> and <code class="computeroutput"><span class="identifier">clip</span></code> policies don't allow the bounds to be
+      excluded?</a></span></dt>
+<dt><span class="section"><a href="constrained_value/rationale.html#constrained_value.rationale.auto_type"> Why there's no
+      automatic deduction of the underlying type for integral bounded objects?</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="constrained_value/reference.html">Reference</a></span></dt>
+</dl>
+</div>
+<div class="important"><table border="0" summary="Important">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../doc/html/images/important.png"></td>
+<th align="left">Important</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+      This is <span class="bold"><strong>not an official Boost library</strong></span> yet.
+      It is prepared for a formal review and therefore contains information stating
+      it is a part of Boost, but it has not yet been formally reviewed nor accepted.
+    </p></td></tr>
+</table></div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="constrained_value.motivation"></a><a class="link" href="index.html#constrained_value.motivation" title="Motivation">Motivation</a>
+</h2></div></div></div>
+<p>
+      </p>
+<p>
+        The Boost Constrained Value library contains class templates useful for creating
+        <a class="link" href="constrained_value/introduction.html#constrained_object_def">constrained objects</a>. A simple
+        example is an object representing an hour of a day, for which only integers
+        from the range [0, 23] are valid values:
+      </p>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><a href="reference/structboost_1_1constrained__value_1_1bounded__int.html" target="_top">bounded_int</a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">23</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">hour</span><span class="special">;</span>
+<span class="identifier">hour</span> <span class="special">=</span> <span class="number">20</span><span class="special">;</span> <span class="comment">// OK
+</span><span class="identifier">hour</span> <span class="special">=</span> <span class="number">26</span><span class="special">;</span> <span class="comment">// exception!</span></pre>
+<p>
+      </p>
+<p>
+      </p>
+<p>
+        Behavior in case of assignment of an invalid value can be customized. For
+        instance, instead of throwing an exception as in the example above, the value
+        may be adjusted to meet the constraint:
+      </p>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><a href="reference/structboost_1_1constrained__value_1_1wrapping__int.html" target="_top">wrapping_int</a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">255</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">buffer_index</span><span class="special">;</span>
+<span class="identifier">buffer_index</span> <span class="special">=</span> <span class="number">257</span><span class="special">;</span> <span class="comment">// OK: adjusts the value to fit in the range by wrapping it
+</span><span class="identifier">assert</span><span class="special">(</span> <span class="identifier">buffer_index</span> <span class="special">==</span> <span class="number">1</span> <span class="special">);</span></pre>
+<p>
+      </p>
+<p>
+      </p>
+<p>
+        The library doesn't focus only on <a class="link" href="constrained_value/introduction.html#bounded_object_def">bounded
+        objects</a> as in the examples above -- virtually any constraint can be
+        imposed by using a predicate:
+      </p>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// constraint (a predicate)
+</span><span class="keyword">struct</span> <span class="identifier">is_odd</span> <span class="special">{</span>
+    <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">()</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span><span class="special">)</span> <span class="keyword">const</span>
+    <span class="special">{</span> <span class="keyword">return</span> <span class="special">(</span><span class="identifier">i</span> <span class="special">%</span> <span class="number">2</span><span class="special">)</span> <span class="special">!=</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span>
+<span class="special">};</span>
+
+<span class="comment">// and the usage is as simple as:
+</span><a href="reference/classboost_1_1constrained__value_1_1constrained.html" target="_top">constrained</a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">is_odd</span><span class="special">&gt;</span> <span class="identifier">odd_int</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span>
+<span class="identifier">odd_int</span> <span class="special">+=</span> <span class="number">2</span><span class="special">;</span> <span class="comment">// OK
+</span><span class="special">++</span><span class="identifier">odd_int</span><span class="special">;</span> <span class="comment">// exception!</span></pre>
+<p>
+      </p>
+<p>
+      </p>
+<p>
+        The library has a policy-based design to allow for flexibility in defining
+        constraints and behavior in case of assignment of invalid values. Policies
+        may be configured at compile-time for maximum efficiency or may be changeable
+        at runtime if such dynamic functionality is needed.
+      </p>
+<p>
+    </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"><p><small>Last revised: November 30, 2008 at  GMT</small></p></td>
+<td align="right"><div class="copyright-footer"></div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"><a accesskey="n" href="constrained_value/introduction.html"><img src="../../../../doc/html/images/next.png" alt="Next"></a></div>
+</body>
+</html>

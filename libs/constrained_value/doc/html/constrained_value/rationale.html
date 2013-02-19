@@ -1,0 +1,182 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Rationale</title>
+<link rel="stylesheet" href="../../../../../doc/html/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="../index.html" title="The Boost Constrained Value library">
+<link rel="up" href="../index.html" title="The Boost Constrained Value library">
+<link rel="prev" href="examples.html" title="Examples">
+<link rel="next" href="reference.html" title="Reference">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="examples.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="constrained_value.rationale"></a><a class="link" href="rationale.html" title="Rationale">Rationale</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="rationale.html#constrained_value.rationale.overflows"> Why bounded objects
+      don't protect against arithmetic overflows?</a></span></dt>
+<dt><span class="section"><a href="rationale.html#constrained_value.rationale.no_floats"> Why C++'s floating
+      point types shouldn't be used with bounded objects?</a></span></dt>
+<dt><span class="section"><a href="rationale.html#constrained_value.rationale.wrap_clip_closed_range">
+      Why <code class="computeroutput"><span class="identifier">wrap</span></code> and <code class="computeroutput"><span class="identifier">clip</span></code> policies don't allow the bounds to be
+      excluded?</a></span></dt>
+<dt><span class="section"><a href="rationale.html#constrained_value.rationale.auto_type"> Why there's no
+      automatic deduction of the underlying type for integral bounded objects?</a></span></dt>
+</dl></div>
+<p>
+      This section contains explanation of some of the design decisions and answers
+      for some typical questions.
+    </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="constrained_value.rationale.overflows"></a><a class="link" href="rationale.html#constrained_value.rationale.overflows" title="Why bounded objects don't protect against arithmetic overflows?"> Why bounded objects
+      don't protect against arithmetic overflows?</a>
+</h3></div></div></div>
+<p>
+        The short answer is that it's simply not the library's task to handle arithmetic
+        operations' overflows. A bit longer answer is that overflows:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+          are separated from the concept of constrained objects (so rather another
+          library should address it),
+        </li>
+<li>
+          are specific to integral types, while this library is aimed to be universal
+          and not focused on built-in types only,
+        </li>
+<li>
+          need complicated and platform-dependent solutions.
+        </li>
+</ul></div>
+<p>
+        All the arithmetic operations are forwarded to the value type's native operators
+        and then the result is checked for constraint conformance. Therefore, to
+        avoid overflows you should use a value type that does not overflow or that
+        detects and handles overflows. This could be:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+          an infinite precision integer class, like <code class="computeroutput"><span class="identifier">integer</span></code>
+          class described in <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2007/n2143.pdf" target="_top">the
+          proposal</a> for C++ TR2,
+        </li>
+<li>
+          a safe integer class which catches and signals all overflows, like <code class="computeroutput"><span class="identifier">SafeInt</span></code> class described <a href="http://msdn.microsoft.com/en-us/library/ms972705.aspx" target="_top">here</a>.
+        </li>
+</ul></div>
+<p>
+        The problem is that at the moment there's no standard, portable solution.
+        The first isn't standard yet, the second is highly platform-dependent.
+      </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="constrained_value.rationale.no_floats"></a><a class="link" href="rationale.html#constrained_value.rationale.no_floats" title="Why C++'s floating point types shouldn't be used with bounded objects?"> Why C++'s floating
+      point types shouldn't be used with bounded objects?</a>
+</h3></div></div></div>
+<p>
+        Floating point operations in C++ are very different from what one would expect
+        from a numeric type. In particular, quoting <a href="http://hal.archives-ouvertes.fr/hal-00128124/en/" target="_top"><span class="emphasis"><em>The
+        pitfalls of verifying floating-point computations</em></span></a> by David
+        Monniaux:
+      </p>
+<div class="blockquote"><blockquote class="blockquote">
+<p>
+          </p>
+<p>
+            [...] there exist a number of myths of what IEEE-compliance really entails
+            from the point of view of program semantics. We shall discuss the following
+            myths, among others: [...] "If <code class="computeroutput"><span class="identifier">x</span>
+            <span class="special">&lt;</span> <span class="number">1</span></code>
+            tests true at one point, then <code class="computeroutput"><span class="identifier">x</span>
+            <span class="special">&lt;</span> <span class="number">1</span></code>
+            stays true later if I never modify <code class="computeroutput"><span class="identifier">x</span></code>."
+          </p>
+<p>
+        </p>
+</blockquote></div>
+<p>
+        This is crucial with respect to <code class="computeroutput"><a href="../reference/classboost_1_1constrained__value_1_1within__bounds.html" target="_top">within_bounds</a></code>
+        predicate (used as the constraint policy for bounded types), which must return
+        consistent results so <code class="computeroutput"><a href="../reference/classboost_1_1constrained__value_1_1constrained.html" target="_top">constrained</a></code>
+        class can preserve its invariant. The conclusion is: don't use built-in floating
+        point types with this library (until you <span class="underline">really</span>
+        know what you're doing).
+      </p>
+<p>
+        If you need to manipulate real numbers as the underlying value type, consider
+        using a fixed/floating point library which allows for reliable and repeatable
+        comparisons. Note however, that comparison of values of the type used should
+        imply <a href="http://en.wikipedia.org/wiki/Strict_weak_ordering" target="_top">strict
+        weak ordering</a>, which may not be the case if objects of this type
+        can have the <a href="http://en.wikipedia.org/wiki/NaN" target="_top">NaN</a> value.
+      </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="constrained_value.rationale.wrap_clip_closed_range"></a><a class="link" href="rationale.html#constrained_value.rationale.wrap_clip_closed_range" title="Why wrap and clip policies don't allow the bounds to be excluded?">
+      Why <code class="computeroutput"><span class="identifier">wrap</span></code> and <code class="computeroutput"><span class="identifier">clip</span></code> policies don't allow the bounds to be
+      excluded?</a>
+</h3></div></div></div>
+<p>
+        The formula for wrapping a value within an open range would be relatively
+        complicated and the effects could be possibly confusing. But since <code class="computeroutput"><a href="../reference/structboost_1_1constrained__value_1_1wrap.html" target="_top">wrap</a></code>
+        error policy is implemented for integer-like types only, there always exists
+        a corresponding closed range that can be used instead of an open range.
+      </p>
+<p>
+        The <code class="computeroutput"><a href="../reference/structboost_1_1constrained__value_1_1clip.html" target="_top">clip</a></code>
+        error policy must be able to assign a value of any of the bounds to a clipping
+        bounded object, hence the bounds must be valid values for such an object
+        and cannot be excluded from the allowed range.
+      </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="constrained_value.rationale.auto_type"></a><a class="link" href="rationale.html#constrained_value.rationale.auto_type" title="Why there's no automatic deduction of the underlying type for integral bounded objects?"> Why there's no
+      automatic deduction of the underlying type for integral bounded objects?</a>
+</h3></div></div></div>
+<p>
+        Why one can't simply write <code class="computeroutput"><span class="identifier">bounded_int</span><span class="special">&lt;-</span><span class="number">100</span><span class="special">,</span>
+        <span class="number">100</span><span class="special">&gt;::</span><span class="identifier">type</span></code> and let it figure out the best underlying
+        value type automatically?
+      </p>
+<p>
+        The answer is there's no universally <span class="emphasis"><em>best</em></span> type that
+        can be chosen. For some applications, the less space-consuming type is used
+        the better, while other usages may require some wider type to avoid overflows
+        during specific computations. That's why the choice of the underlying type
+        should always be a conscious decision of the programmer, not left to an automatic
+        mechanism taking only the bounds' values into account.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright © 2004 -2008 Robert Kawulak (Robert.Kawulak.at.gmail.com)<p>
+        Distributed under the Boost Software License, Version 1.0 (see accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>).
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="examples.html"><img src="../../../../../doc/html/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/html/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/html/images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../../../../../doc/html/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
