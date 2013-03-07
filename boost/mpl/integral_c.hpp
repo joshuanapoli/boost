@@ -43,7 +43,9 @@ struct integral_c<bool, C>
     typedef integral_c_tag tag;
     typedef integral_c type;
     typedef bool value_type;
-    operator bool() const { return this->value; }
+    BOOST_CONSTEXPR integral_c() {}
+    BOOST_CONSTEXPR integral_c(const integral_c&) {}
+    BOOST_CONSTEXPR operator bool() const { return this->value; }
 };
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 #endif

@@ -73,11 +73,14 @@ struct AUX_WRAPPER_NAME
     typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (value - 1)) ) prior;
 #endif
 
+    BOOST_CONSTEXPR AUX_WRAPPER_NAME() {}
+    BOOST_CONSTEXPR AUX_WRAPPER_NAME(const AUX_WRAPPER_NAME&) {}
+
     // enables uniform function call syntax for families of overloaded 
     // functions that return objects of both arithmetic ('int', 'long',
     // 'double', etc.) and wrapped integral types (for an example, see 
     // "mpl/example/power.cpp")
-    operator AUX_WRAPPER_VALUE_TYPE() const { return static_cast<AUX_WRAPPER_VALUE_TYPE>(this->value); } 
+    BOOST_CONSTEXPR operator AUX_WRAPPER_VALUE_TYPE() const { return static_cast<AUX_WRAPPER_VALUE_TYPE>(this->value); }
 };
 
 #if !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)

@@ -105,22 +105,22 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {} 
+      BOOST_CONSTEXPR compressed_pair_imp() {} 
 
-      compressed_pair_imp(first_param_type x, second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x, second_param_type y)
          : first_(x), second_(y) {}
 
-      compressed_pair_imp(first_param_type x)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x)
          : first_(x) {}
 
-      compressed_pair_imp(second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(second_param_type y)
          : second_(y) {}
 
       first_reference       first()       {return first_;}
-      first_const_reference first() const {return first_;}
+      BOOST_CONSTEXPR first_const_reference first() const {return first_;}
 
       second_reference       second()       {return second_;}
-      second_const_reference second() const {return second_;}
+      BOOST_CONSTEXPR second_const_reference second() const {return second_;}
 
       void swap(::boost::compressed_pair<T1, T2>& y)
       {
@@ -148,22 +148,22 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {}
+      BOOST_CONSTEXPR compressed_pair_imp() {}
 
-      compressed_pair_imp(first_param_type x, second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x, second_param_type y)
          : first_type(x), second_(y) {}
 
-      compressed_pair_imp(first_param_type x)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x)
          : first_type(x) {}
 
-      compressed_pair_imp(second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(second_param_type y)
          : second_(y) {}
 
       first_reference       first()       {return *this;}
-      first_const_reference first() const {return *this;}
+      BOOST_CONSTEXPR first_const_reference first() const {return *this;}
 
       second_reference       second()       {return second_;}
-      second_const_reference second() const {return second_;}
+      BOOST_CONSTEXPR second_const_reference second() const {return second_;}
 
       void swap(::boost::compressed_pair<T1,T2>& y)
       {
@@ -190,22 +190,22 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {}
+      BOOST_CONSTEXPR compressed_pair_imp() {}
 
-      compressed_pair_imp(first_param_type x, second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x, second_param_type y)
          : second_type(y), first_(x) {}
 
-      compressed_pair_imp(first_param_type x)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x)
          : first_(x) {}
 
-      compressed_pair_imp(second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(second_param_type y)
          : second_type(y) {}
 
       first_reference       first()       {return first_;}
-      first_const_reference first() const {return first_;}
+      BOOST_CONSTEXPR first_const_reference first() const {return first_;}
 
       second_reference       second()       {return *this;}
-      second_const_reference second() const {return *this;}
+      BOOST_CONSTEXPR second_const_reference second() const {return *this;}
 
       void swap(::boost::compressed_pair<T1,T2>& y)
       {
@@ -234,22 +234,22 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {}
+      BOOST_CONSTEXPR compressed_pair_imp() {}
 
-      compressed_pair_imp(first_param_type x, second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x, second_param_type y)
          : first_type(x), second_type(y) {}
 
-      compressed_pair_imp(first_param_type x)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x)
          : first_type(x) {}
 
-      compressed_pair_imp(second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(second_param_type y)
          : second_type(y) {}
 
       first_reference       first()       {return *this;}
-      first_const_reference first() const {return *this;}
+      BOOST_CONSTEXPR first_const_reference first() const {return *this;}
 
       second_reference       second()       {return *this;}
-      second_const_reference second() const {return *this;}
+      BOOST_CONSTEXPR second_const_reference second() const {return *this;}
       //
       // no need to swap empty bases:
       void swap(::boost::compressed_pair<T1,T2>&) {}
@@ -276,19 +276,19 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {}
+      BOOST_CONSTEXPR compressed_pair_imp() {}
 
-      compressed_pair_imp(first_param_type x, second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x, second_param_type y)
          : first_type(x), m_second(y) {}
 
-      compressed_pair_imp(first_param_type x)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x)
          : first_type(x), m_second(x) {}
 
       first_reference       first()       {return *this;}
-      first_const_reference first() const {return *this;}
+      BOOST_CONSTEXPR first_const_reference first() const {return *this;}
 
       second_reference       second()       {return m_second;}
-      second_const_reference second() const {return m_second;}
+      BOOST_CONSTEXPR second_const_reference second() const {return m_second;}
 
       void swap(::boost::compressed_pair<T1,T2>&) {}
    private:
@@ -310,19 +310,19 @@ namespace details
       typedef typename call_traits<first_type>::const_reference  first_const_reference;
       typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-      compressed_pair_imp() {}
+      BOOST_CONSTEXPR compressed_pair_imp() {}
 
-      compressed_pair_imp(first_param_type x, second_param_type y)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x, second_param_type y)
          : first_(x), second_(y) {}
 
-      compressed_pair_imp(first_param_type x)
+      BOOST_CONSTEXPR compressed_pair_imp(first_param_type x)
          : first_(x), second_(x) {}
 
       first_reference       first()       {return first_;}
-      first_const_reference first() const {return first_;}
+      BOOST_CONSTEXPR first_const_reference first() const {return first_;}
 
       second_reference       second()       {return second_;}
-      second_const_reference second() const {return second_;}
+      BOOST_CONSTEXPR second_const_reference second() const {return second_;}
 
       void swap(::boost::compressed_pair<T1, T2>& y)
       {
@@ -364,16 +364,16 @@ public:
    typedef typename call_traits<first_type>::const_reference  first_const_reference;
    typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-            compressed_pair() : base() {}
-            compressed_pair(first_param_type x, second_param_type y) : base(x, y) {}
-   explicit compressed_pair(first_param_type x) : base(x) {}
-   explicit compressed_pair(second_param_type y) : base(y) {}
+   BOOST_CONSTEXPR          compressed_pair() : base() {}
+   BOOST_CONSTEXPR          compressed_pair(first_param_type x, second_param_type y) : base(x, y) {}
+   BOOST_CONSTEXPR explicit compressed_pair(first_param_type x) : base(x) {}
+   BOOST_CONSTEXPR explicit compressed_pair(second_param_type y) : base(y) {}
 
    first_reference       first()       {return base::first();}
-   first_const_reference first() const {return base::first();}
+   BOOST_CONSTEXPR first_const_reference first() const {return base::first();}
 
    second_reference       second()       {return base::second();}
-   second_const_reference second() const {return base::second();}
+   BOOST_CONSTEXPR second_const_reference second() const {return base::second();}
 
    void swap(compressed_pair& y) { base::swap(y); }
 };
@@ -409,18 +409,18 @@ public:
    typedef typename call_traits<first_type>::const_reference  first_const_reference;
    typedef typename call_traits<second_type>::const_reference second_const_reference;
 
-            compressed_pair() : base() {}
-            compressed_pair(first_param_type x, second_param_type y) : base(x, y) {}
+   BOOST_CONSTEXPR          compressed_pair() : base() {}
+   BOOST_CONSTEXPR          compressed_pair(first_param_type x, second_param_type y) : base(x, y) {}
 #if !(defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x530))
    explicit 
 #endif
-      compressed_pair(first_param_type x) : base(x) {}
+   BOOST_CONSTEXPR    compressed_pair(first_param_type x) : base(x) {}
 
    first_reference       first()       {return base::first();}
-   first_const_reference first() const {return base::first();}
+   BOOST_CONSTEXPR first_const_reference first() const {return base::first();}
 
    second_reference       second()       {return base::second();}
-   second_const_reference second() const {return base::second();}
+   BOOST_CONSTEXPR second_const_reference second() const {return base::second();}
 
    void swap(::boost::compressed_pair<T,T>& y) { base::swap(y); }
 };
