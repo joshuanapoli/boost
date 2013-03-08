@@ -72,9 +72,9 @@ struct throw_exception
     /// BOOST_THROW_EXCEPTION</a></tt> macro to throw a default-constructed
     /// exception of #exception_type.
     template <typename V, typename C>
-    void operator () (const V &, const V &, const C &) const
+    BOOST_CONSTEXPR V operator () (const V & v, const V &, const C &) const
     {
-        BOOST_THROW_EXCEPTION( exception_type() );
+        return false ? v : (throw exception_type() );
     }
 
 };
@@ -144,20 +144,20 @@ public:
 // Access to the value and constraint:
 
     /// The underlying #value_type object.
-    const value_type & value() const
+    BOOST_CONSTEXPR const value_type & value() const
     { return _value_and_policies.value; }
 
     /// Operator of implicit conversion to #value_type.
     /// @return value()
-    operator const value_type & () const
+    BOOST_CONSTEXPR operator const value_type & () const
     { return value(); }
 
     /// The underlying #constraint_type object.
-    const constraint_type & constraint() const
+    BOOST_CONSTEXPR const constraint_type & constraint() const
     { return _value_and_policies.first(); }
 
     /// The underlying #error_handler_type object.
-    const error_handler_type & error_handler() const
+    BOOST_CONSTEXPR const error_handler_type & error_handler() const
     { return _value_and_policies.second(); }
 
     /// Non-const access to the underlying #error_handler_type object.
@@ -176,9 +176,9 @@ public:
     /// @remarks
     /// - All the constrained template actual parameters must be @c DefaultConstructible.
     /// - Neither #constraint_type nor #error_handler_type can be a non-empty POD type.
-    constrained()
+    BOOST_CONSTEXPR constrained()
         : _value_and_policies()
-    { _initialize(); }
+    {  }
 
     // Using implicitly-declared other special member functions.
 
@@ -206,9 +206,9 @@ public:
     ///   to the corresponding actual parameters of the containing class template.
     /// - All the containing class template actual parameters must be @c CopyConstructible.
     template <typename V, typename C, typename E>
-    explicit constrained(const constrained<V, C, E> & other)
-        : _value_and_policies(other.value(), other.constraint(), other.error_handler())
-    { _initialize(); }
+    BOOST_CONSTEXPR explicit constrained(const constrained<V, C, E> & other)
+        : _value_and_policies(validate(other.value(), other.constraint(), other.error_handler()), other.constraint(), other.error_handler())
+    {  }
 
     /// Constructor converting implicitly from #value_type.
     ///
@@ -219,9 +219,9 @@ public:
     /// - #value_type must be @c CopyConstructible.
     /// - #constraint_type and #error_handler_type must be @c DefaultConstructible.
     /// - Neither #constraint_type nor #error_handler_type can be a non-empty POD type.
-    constrained(const value_type & v)
-        : _value_and_policies(v)
-    { _initialize(); }
+    BOOST_CONSTEXPR constrained(const value_type & v)
+        : _value_and_policies(validate(v, constraint_type(), error_handler_type()))
+    {  }
 
     /// Constructor initializing the constraint with the given object.
     ///
@@ -232,9 +232,9 @@ public:
     /// - #constraint_type must be @c CopyConstructible.
     /// - #value_type and #error_handler_type must be @c DefaultConstructible.
     /// - #error_handler_type cannot be a non-empty POD type.
-    explicit constrained(const constraint_type & c)
-        : _value_and_policies(c)
-    { _initialize(); }
+    BOOST_CONSTEXPR explicit constrained(const constraint_type & c)
+        : _value_and_policies(validate(value_type(), c, error_handler_type()), c)
+    {  }
 
     /// Constructor initializing the error handler with the given object.
     ///
@@ -245,9 +245,9 @@ public:
     /// - #error_handler_type must be @c CopyConstructible.
     /// - #value_type and #constraint_type must be @c DefaultConstructible.
     /// - #constraint_type cannot be a non-empty POD type.
-    explicit constrained(const error_handler_type & e)
-        : _value_and_policies(e)
-    { _initialize(); }
+    BOOST_CONSTEXPR explicit constrained(const error_handler_type & e)
+        : _value_and_policies(validate(value_type(), constraint_type(), e), e)
+    {  }
 
     /// Constructor initializing the value and the constraint with the given objects.
     ///
@@ -258,9 +258,9 @@ public:
     /// - #value_type and #constraint_type must be @c CopyConstructible.
     /// - #error_handler_type must be @c DefaultConstructible.
     /// - #error_handler_type cannot be a non-empty POD type.
-    constrained(const value_type & v, const constraint_type & c)
-        : _value_and_policies(v, c)
-    { _initialize(); }
+    BOOST_CONSTEXPR constrained(const value_type & v, const constraint_type & c)
+        : _value_and_policies(validate(v, c, error_handler_type()), c)
+    {  }
 
     /// Constructor initializing the value and the error handler with the given objects.
     ///
@@ -271,9 +271,9 @@ public:
     /// - #value_type and #error_handler_type must be @c CopyConstructible.
     /// - #constraint_type must be @c DefaultConstructible.
     /// - #constraint_type cannot be a non-empty POD type.
-    constrained(const value_type & v, const error_handler_type & e)
-        : _value_and_policies(v, e)
-    { _initialize(); }
+    BOOST_CONSTEXPR constrained(const value_type & v, const error_handler_type & e)
+        : _value_and_policies(validate(v, constraint_type(), e), e)
+    {  }
 
     /// Constructor initializing the constraint and the error handler with the given objects.
     ///
@@ -283,9 +283,9 @@ public:
     /// @remarks
     /// - #constraint_type and #error_handler_type must be @c CopyConstructible.
     /// - #value_type must be @c DefaultConstructible.
-    constrained(const constraint_type & c, const error_handler_type & e)
-        : _value_and_policies(c, e)
-    { _initialize(); }
+    BOOST_CONSTEXPR constrained(const constraint_type & c, const error_handler_type & e)
+        : _value_and_policies(validate(value_type(), c, e), c, e)
+    {  }
 
     /// Constructor initializing all the underlying objects with the given objects.
     ///
@@ -293,9 +293,9 @@ public:
     /// @a c, the copy of @a e is called.
     ///
     /// @remarks All constrained template actual parameters must be @c CopyConstructible.
-    constrained(const value_type & v, const constraint_type & c, const error_handler_type & e)
-        : _value_and_policies(v, c, e)
-    { _initialize(); }
+    BOOST_CONSTEXPR constrained(const value_type & v, const constraint_type & c, const error_handler_type & e)
+        : _value_and_policies(validate(v), c, e)
+    {  }
 
 
 // Assignment operators:
@@ -353,13 +353,10 @@ private:
     ///
     /// If the underlying value is not constraint-conforming,
     /// the error handler is called.
-    void _initialize()
+    constexpr static value_type validate(value_type value, const constraint_type& constraint, const error_handler_type& error_handler)
     {
-        if( !constraint()(value()) )
-        {
-            error_handler()(_value(), value(), _constraint());
-            BOOST_ASSERT( constraint()(value()) );
-        }
+        return constraint(value) ? value : 
+            error_handler(value, value, constraint);
     }
 
     /// Non-const access to the underlying #value_type object.
@@ -397,16 +394,7 @@ private:
 
     // Construction:
 
-        _value_and_policies_holder()
-            : base(), value()
-        {
-            BOOST_STATIC_ASSERT(( !boost::is_pod<constraint_type>::value
-                || boost::is_empty<constraint_type>::value ));
-            BOOST_STATIC_ASSERT(( !boost::is_pod<error_handler_type>::value
-                || boost::is_empty<error_handler_type>::value ));
-        }
-
-        _value_and_policies_holder(const value_type & v)
+        BOOST_CONSTEXPR _value_and_policies_holder(const value_type & v)
             : base(), value(v)
         {
             BOOST_STATIC_ASSERT(( !boost::is_pod<constraint_type>::value
@@ -415,39 +403,21 @@ private:
                 || boost::is_empty<error_handler_type>::value ));
         }
 
-        _value_and_policies_holder(const constraint_type & c)
-            : base(c), value()
-        {
-            BOOST_STATIC_ASSERT(( !boost::is_pod<error_handler_type>::value
-                || boost::is_empty<error_handler_type>::value ));
-        }
-
-        _value_and_policies_holder(const error_handler_type & e)
-            : base(e), value()
-        {
-            BOOST_STATIC_ASSERT(( !boost::is_pod<constraint_type>::value
-                || boost::is_empty<constraint_type>::value ));
-        }
-
-        _value_and_policies_holder(const value_type & v, const constraint_type & c)
+        BOOST_CONSTEXPR _value_and_policies_holder(const value_type & v, const constraint_type & c)
             : base(c), value(v)
         {
             BOOST_STATIC_ASSERT(( !boost::is_pod<error_handler_type>::value
                 || boost::is_empty<error_handler_type>::value ));
         }
 
-        _value_and_policies_holder(const value_type & v, const error_handler_type & e)
+        BOOST_CONSTEXPR _value_and_policies_holder(const value_type & v, const error_handler_type & e)
             : base(e), value(v)
         {
             BOOST_STATIC_ASSERT(( !boost::is_pod<constraint_type>::value
                 || boost::is_empty<constraint_type>::value ));
         }
 
-        _value_and_policies_holder(const constraint_type & c, const error_handler_type & e)
-            : base(c, e), value()
-        { }
-
-        _value_and_policies_holder(
+        BOOST_CONSTEXPR _value_and_policies_holder(
             const value_type & v, const constraint_type & c, const error_handler_type & e)
             : base(c, e), value(v)
         { }

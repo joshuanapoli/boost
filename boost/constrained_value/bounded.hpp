@@ -77,7 +77,7 @@ class within_bounds :
     // - grouping them like <L, LE>, <U, UE> will cause error when L = U and
     //   LE = UE (the same type repeated in base classes list),
     // - grouping them like <L, U>, <LE, UE> will prohibit full space optimization
-    //   when L = U or LE = UE due to the way compressed_pair is implementated.
+    //   when L = U or LE = UE due to the way compressed_pair is implemented.
     // Note, that the current solution would also cause repeated base class error
     // in the case when L = UE and U = LE, but such case seems to be very unlikely
     // and rather erroneous.
@@ -129,7 +129,7 @@ public:
     { return _lower_holder_type::first(); }
 
     /// Returns the lower bound object.
-    const lower_type & lower_bound() const
+    BOOST_CONSTEXPR const lower_type & lower_bound() const
     { return _lower_holder_type::first(); }
 
 
@@ -138,7 +138,7 @@ public:
     { return _upper_holder_type::second(); }
 
     /// Returns the upper bound object.
-    const upper_type & upper_bound() const
+    BOOST_CONSTEXPR const upper_type & upper_bound() const
     { return _upper_holder_type::second(); }
 
 
@@ -147,7 +147,7 @@ public:
     { return _lower_holder_type::second(); }
 
     /// Returns the lower bound exclusion indicator.
-    const lower_excl_type & lower_bound_excluded() const
+    BOOST_CONSTEXPR const lower_excl_type & lower_bound_excluded() const
     { return _lower_holder_type::second(); }
 
 
@@ -156,7 +156,7 @@ public:
     { return _upper_holder_type::first(); }
 
     /// Returns the upper bound exclusion indicator.
-    const upper_excl_type & upper_bound_excluded() const
+    BOOST_CONSTEXPR const upper_excl_type & upper_bound_excluded() const
     { return _upper_holder_type::first(); }
 
 
@@ -165,7 +165,7 @@ public:
     { return *this; }
 
     /// Returns the comparison predicate object.
-    const compare_type & compare() const
+    BOOST_CONSTEXPR const compare_type & compare() const
     { return *this; }
 
 
@@ -176,10 +176,16 @@ public:
     /// - #lower_type, #upper_type, #lower_excl_type and #upper_excl_type
     ///   must be @c DefaultConstructible and @c CopyConstructible.
     /// - #compare_type must be @c DefaultConstructible.
-    within_bounds() :
+    BOOST_CONSTEXPR within_bounds() :
         _lower_holder_type(lower_type(), lower_excl_type()),
         _upper_holder_type(upper_excl_type(), upper_type()),
         compare_type()
+    { }
+
+    BOOST_CONSTEXPR within_bounds(const within_bounds& other) :
+        _lower_holder_type(other),
+        _upper_holder_type(other),
+        compare_type(other)
     { }
 
     // Using implicitly-declared other special member functions.
@@ -201,7 +207,7 @@ public:
     /// - #lower_type, #upper_type, #lower_excl_type and #upper_excl_type
     ///   must be @c DefaultConstructible and @c CopyConstructible.
     /// - #compare_type must be @c CopyConstructible.
-    explicit within_bounds(const compare_type & c) :
+    BOOST_CONSTEXPR explicit within_bounds(const compare_type & c) :
         _lower_holder_type(lower_type(), lower_excl_type()),
         _upper_holder_type(upper_excl_type(), upper_type()),
         compare_type(c)
@@ -213,7 +219,7 @@ public:
     /// - #lower_excl_type and #upper_excl_type must be
     ///   @c DefaultConstructible and @c CopyConstructible.
     /// - #compare_type must be @c DefaultConstructible.
-    within_bounds(const lower_type & l, const upper_type & u) :
+    BOOST_CONSTEXPR within_bounds(const lower_type & l, const upper_type & u) :
         _lower_holder_type(l, lower_excl_type()),
         _upper_holder_type(upper_excl_type(), u),
         compare_type()
@@ -225,7 +231,7 @@ public:
     ///   @c CopyConstructible.
     /// - #lower_excl_type and #upper_excl_type must be @c CopyConstructible.
     /// - #compare_type must be @c DefaultConstructible.
-    within_bounds(const lower_excl_type & le, const upper_excl_type & ue) :
+    BOOST_CONSTEXPR within_bounds(const lower_excl_type & le, const upper_excl_type & ue) :
         _lower_holder_type(lower_type(), le),
         _upper_holder_type(ue, upper_type()),
         compare_type()
@@ -236,7 +242,7 @@ public:
     /// - #lower_type, #upper_type and #compare_type must be @c CopyConstructible.
     /// - #lower_excl_type and #upper_excl_type must be @c DefaultConstructible and
     ///   @c CopyConstructible.
-    within_bounds(const lower_type & l, const upper_type & u, const compare_type & c) :
+    BOOST_CONSTEXPR within_bounds(const lower_type & l, const upper_type & u, const compare_type & c) :
         _lower_holder_type(l, lower_excl_type()),
         _upper_holder_type(upper_excl_type(), u),
         compare_type(c)
@@ -247,7 +253,7 @@ public:
     /// @remarks
     /// - #lower_type and #upper_type must be @c DefaultConstructible and @c CopyConstructible.
     /// - #lower_excl_type, #upper_excl_type and #compare_type must be @c CopyConstructible.
-    within_bounds(const lower_excl_type & le, const upper_excl_type & ue, const compare_type & c) :
+    BOOST_CONSTEXPR within_bounds(const lower_excl_type & le, const upper_excl_type & ue, const compare_type & c) :
         _lower_holder_type(lower_type(), le),
         _upper_holder_type(ue, upper_type()),
         compare_type(c)
@@ -259,7 +265,7 @@ public:
     /// - #lower_type, #upper_type, #lower_excl_type and #upper_excl_type must be
     ///   @c CopyConstructible.
     /// - #compare_type must be @c DefaultConstructible.
-    within_bounds(const lower_type & l, const upper_type & u,
+    BOOST_CONSTEXPR within_bounds(const lower_type & l, const upper_type & u,
                   const lower_excl_type & le, const upper_excl_type & ue) :
         _lower_holder_type(l, le),
         _upper_holder_type(ue, u),
@@ -268,7 +274,7 @@ public:
 
     /// Constructor initializing all the underlying objects with the given objects.
     /// @remarks All within_bounds template actual parameters must be @c CopyConstructible.
-    within_bounds(const lower_type & l, const upper_type & u,
+    BOOST_CONSTEXPR within_bounds(const lower_type & l, const upper_type & u,
                   const lower_excl_type & le, const upper_excl_type & ue, const compare_type & c) :
         _lower_holder_type(l, le),
         _upper_holder_type(ue, u),
@@ -282,31 +288,29 @@ public:
     /// @return Result of the compare() predicate invocation for the @a value
     /// and the lower_bound(), with respect to lower_bound_excluded().
     template <typename T>
-    bool is_below(const T & value) const
+    BOOST_CONSTEXPR bool is_below(const T & value) const
     {
-        if( !lower_bound_excluded() )
-            return compare()(value, lower_bound());
-        else
-            return !compare()(lower_bound(), value);
+        return !lower_bound_excluded()
+          ? compare()(value, lower_bound())
+          : !compare()(lower_bound(), value);
     }
 
     /// Tells whether the @a value is above the range.
     /// @return Result of the compare() predicate invocation for the @a value
     /// and the upper_bound(), with respect to upper_bound_excluded().
     template <typename T>
-    bool is_above(const T & value) const
+    BOOST_CONSTEXPR bool is_above(const T & value) const
     {
-        if( !upper_bound_excluded() )
-            return compare()(upper_bound(), value);
-        else
-            return !compare()(value, upper_bound());
+        return !upper_bound_excluded()
+          ? compare()(upper_bound(), value)
+          : !compare()(value, upper_bound());
     }
 
     /// Tells whether the @a value is within the range.
     /// @return Result of the compare() predicate invocation for the @a value
     /// and the bounds, with respect to bounds exclusion.
     template <typename T>
-    bool is_within(const T & value) const
+    BOOST_CONSTEXPR bool is_within(const T & value) const
     {
         return !is_below(value) && !is_above(value);
     }
@@ -314,7 +318,7 @@ public:
     /// Tells whether the @a value is within the range.
     /// @return #is_within(@a value)
     template <typename T>
-    bool operator () (const T & value) const
+    BOOST_CONSTEXPR bool operator () (const T & value) const
     {
         return is_within(value);
     }
@@ -331,7 +335,22 @@ void swap(within_bounds<L, U, LE, UE, C> & lhs, within_bounds<L, U, LE, UE, C> &
     lhs.swap(rhs);
 }
 
+// To be a literal type, bounded requires a constexpr comparison, but std::less does not necessarily provide one.
+template<typename ValueType>
+struct less
+{
+  typedef ValueType first_argument_type;
+  typedef ValueType second_argument_type;
+  typedef bool result_type;
 
+  BOOST_CONSTEXPR less() {}
+  BOOST_CONSTEXPR less(const less&) {}
+
+  BOOST_CONSTEXPR bool operator() (const ValueType& x, const ValueType& y) const
+  {
+    return x < y;
+  }
+};
 
 /// An alias of constrained for %bounded object types (using within_bounds constraint policy).
 template <
@@ -341,7 +360,7 @@ template <
     typename ErrorPolicy = throw_exception<>,
     typename LowerExclType = boost::mpl::false_,
     typename UpperExclType = LowerExclType,
-    typename CompareType = std::less<ValueType>
+    typename CompareType = less<ValueType>
 >
 struct bounded
 {
@@ -370,7 +389,7 @@ template <
     typename ErrorPolicy = throw_exception<>,
     bool LowerExcl = false,
     bool UpperExcl = LowerExcl,
-    typename CompareType = std::less<ValueType>
+    typename CompareType = less<ValueType>
 >
 struct bounded_int
 {
