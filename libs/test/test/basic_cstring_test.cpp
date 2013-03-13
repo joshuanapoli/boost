@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at 
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 54633 $
 //
 //  Description : basic_cstring unit test
 // *****************************************************************************
@@ -19,11 +19,12 @@
 
 // Boost.Test
 #include <boost/test/unit_test.hpp>
+#include <boost/test/test_case_template.hpp>
 
 #include <boost/test/utils/basic_cstring/basic_cstring.hpp>
 #include <boost/test/utils/basic_cstring/compare.hpp>
 #include <boost/test/utils/basic_cstring/io.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/output_test_stream.hpp>
 namespace utf = boost::unit_test;
 namespace tt  = boost::test_tools;
 using utf::const_string;

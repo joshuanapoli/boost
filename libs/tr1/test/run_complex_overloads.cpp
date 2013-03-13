@@ -9,8 +9,9 @@
 #include <boost/tr1/complex.hpp>
 #endif
 
-#define BOOST_TEST_MODULE run_complex_overloads
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/test_tools.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/mpl/if.hpp>
@@ -20,8 +21,8 @@
 #include <iomanip>
 
 #ifndef VERBOSE
-#undef BOOST_TEST_MESSAGE
-#define BOOST_TEST_MESSAGE(x)
+#undef BOOST_MESSAGE
+#define BOOST_MESSAGE(x)
 #endif
 
 //
@@ -142,12 +143,13 @@ void do_check(int i)
    do_check(static_cast<double>(i));
 }
 
-BOOST_AUTO_TEST_CASE( test_main )
+int test_main(int, char*[])
 {
    do_check(0);
    do_check(0.0);
    do_check(1);
    do_check(1.5);
    do_check(0.5);
+   return 0;
 }
 

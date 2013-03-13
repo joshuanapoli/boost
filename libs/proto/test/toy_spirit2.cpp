@@ -10,6 +10,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <boost/version.hpp>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/utility/result_of.hpp>
@@ -285,11 +286,19 @@ namespace boost { namespace spirit2
 
         typedef bool result_type;
 
+        #if BOOST_VERSION >= 104200
         template<typename T>
         bool operator ()(bool success, T const &t) const
         {
             return success && this->parse(t);
         }
+        #else
+        template<typename T>
+        bool operator ()(T const &t, bool success) const
+        {
+            return success && this->parse(t);
+        }
+        #endif
     };
 
     template<typename Iterator>

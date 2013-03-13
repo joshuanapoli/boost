@@ -43,11 +43,6 @@ public:
     {
     }
 
-    // SGI-related compilers have odd compiler-synthesized ctors and dtors
-    #ifdef __PATHSCALE__
-    ~X() {}
-    #endif
-
     int state() const
     {
         return state_;

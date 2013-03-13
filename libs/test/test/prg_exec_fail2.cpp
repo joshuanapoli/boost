@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  (C) Copyright Beman Dawes 2001. 
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at 
@@ -8,7 +8,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 49313 $
 //
 //  Description : tests an ability of Program Execution Monitor to catch 
 //  system exceptions. Should fail during run.
@@ -26,12 +26,11 @@
 #include <cstddef> //Metrowerks linker needs at least one standard library
 #endif
 
-#include <cstdio>
 
 int cpp_main( int, char *[] )  // note the name
 {
-#if (defined(APPLE) && defined(ppc)) || defined(_ARCH_PPC)
-    std::printf("The ppc doesn't throw on divide-by-zero. No check.\n"); 
+#if defined(APPLE) && defined(ppc)
+    printf("The ppc doesn't throw on divice-by-zero. No check.\n"); 
     return 1;
 #else 
     int div = 0;

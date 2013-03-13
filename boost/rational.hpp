@@ -21,7 +21,6 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
-//  05 May 12  Reduced use of implicit gcd (Mario Lang)
 //  05 Nov 06  Change rational_cast to not depend on division between different
 //             types (Daryle Walker)
 //  04 Nov 06  Off-load GCD and LCM to Boost.Math; add some invariant checks;
@@ -142,7 +141,7 @@ public:
     // Default copy constructor and assignment are fine
 
     // Add assignment from IntType
-    rational& operator=(param_type i) { num = i; den = 1; return *this; }
+    rational& operator=(param_type n) { return assign(n, 1); }
 
     // Assign in place
     rational& assign(param_type n, param_type d);
@@ -157,14 +156,14 @@ public:
     rational& operator*= (const rational& r);
     rational& operator/= (const rational& r);
 
-    rational& operator+= (param_type i) { num += i * den; return *this; }
-    rational& operator-= (param_type i) { num -= i * den; return *this; }
+    rational& operator+= (param_type i);
+    rational& operator-= (param_type i);
     rational& operator*= (param_type i);
     rational& operator/= (param_type i);
 
     // Increment and decrement
-    const rational& operator++() { num += den; return *this; }
-    const rational& operator--() { num -= den; return *this; }
+    const rational& operator++();
+    const rational& operator--();
 
     // Operator not
     bool operator!() const { return !num; }
@@ -331,36 +330,46 @@ rational<IntType>& rational<IntType>::operator/= (const rational<IntType>& r)
 // Mixed-mode operators
 template <typename IntType>
 inline rational<IntType>&
+rational<IntType>::operator+= (param_type i)
+{
+    return operator+= (rational<IntType>(i));
+}
+
+template <typename IntType>
+inline rational<IntType>&
+rational<IntType>::operator-= (param_type i)
+{
+    return operator-= (rational<IntType>(i));
+}
+
+template <typename IntType>
+inline rational<IntType>&
 rational<IntType>::operator*= (param_type i)
 {
-    // Avoid overflow and preserve normalization
-    IntType gcd = math::gcd(i, den);
-    num *= i / gcd;
-    den /= gcd;
+    return operator*= (rational<IntType>(i));
+}
 
+template <typename IntType>
+inline rational<IntType>&
+rational<IntType>::operator/= (param_type i)
+{
+    return operator/= (rational<IntType>(i));
+}
+
+// Increment and decrement
+template <typename IntType>
+inline const rational<IntType>& rational<IntType>::operator++()
+{
+    // This can never denormalise the fraction
+    num += den;
     return *this;
 }
 
 template <typename IntType>
-rational<IntType>&
-rational<IntType>::operator/= (param_type i)
+inline const rational<IntType>& rational<IntType>::operator--()
 {
-    // Avoid repeated construction
-    IntType const zero(0);
-
-    if (i == zero) throw bad_rational();
-    if (num == zero) return *this;
-
-    // Avoid overflow and preserve normalization
-    IntType const gcd = math::gcd(num, i);
-    num /= gcd;
-    den *= i / gcd;
-
-    if (den < zero) {
-        num = -num;
-        den = -den;
-    }
-
+    // This can never denormalise the fraction
+    num -= den;
     return *this;
 }
 
@@ -468,7 +477,12 @@ bool rational<IntType>::operator< (param_type i) const
 template <typename IntType>
 bool rational<IntType>::operator> (param_type i) const
 {
-    return operator==(i)? false: !operator<(i);
+    // Trap equality first
+    if (num == i && den == IntType(1))
+        return false;
+
+    // Otherwise, we can use operator<
+    return !operator<(i);
 }
 
 template <typename IntType>
@@ -583,7 +597,10 @@ inline T rational_cast(
 template <typename IntType>
 inline rational<IntType> abs(const rational<IntType>& r)
 {
-    return r.numerator() >= IntType(0)? r: -r;
+    if (r.numerator() >= IntType(0))
+        return r;
+
+    return rational<IntType>(-r.numerator(), r.denominator());
 }
 
 } // namespace boost

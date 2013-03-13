@@ -451,7 +451,7 @@ namespace boost
             thread_info.swap(x.thread_info);
         }
 
-        class BOOST_SYMBOL_VISIBLE id;
+        class id;
 #ifdef BOOST_THREAD_PLATFORM_PTHREAD
         inline id get_id()  const BOOST_NOEXCEPT;
 #else
@@ -725,7 +725,7 @@ namespace boost
         return const_cast<thread*>(this)->native_handle();
     #else
         detail::thread_data_ptr const local_thread_info=(get_thread_info)();
-        return (local_thread_info? id(local_thread_info) id());
+        return (local_thread_info? id(local_thread_info) : id());
     #endif
     }
 
@@ -743,9 +743,9 @@ namespace boost
     }
 #endif
     void thread::join() {
-        BOOST_THREAD_ASSERT_PRECONDITION(  this_thread::get_id() != get_id(),
-            thread_resource_error(system::errc::resource_deadlock_would_occur, "boost thread: trying joining itself")
-        );
+        if (this_thread::get_id() == get_id())
+          boost::throw_exception(thread_resource_error(system::errc::resource_deadlock_would_occur, "boost thread: trying joining itself"));
+
         BOOST_THREAD_VERIFY_PRECONDITION( join_noexcept(),
             thread_resource_error(system::errc::invalid_argument, "boost thread: thread not joinable")
         );
@@ -757,9 +757,8 @@ namespace boost
     bool thread::do_try_join_until(uintmax_t timeout)
 #endif
     {
-        BOOST_THREAD_ASSERT_PRECONDITION( this_thread::get_id() != get_id(),
-            thread_resource_error(system::errc::resource_deadlock_would_occur, "boost thread: trying joining itself")
-        );
+        if (this_thread::get_id() == get_id())
+          boost::throw_exception(thread_resource_error(system::errc::resource_deadlock_would_occur, "boost thread: trying joining itself"));
         bool res;
         if (do_try_join_until_noexcept(timeout, res))
         {
@@ -768,7 +767,7 @@ namespace boost
         else
         {
           BOOST_THREAD_THROW_ELSE_RETURN(
-            thread_resource_error(system::errc::invalid_argument, "boost thread: thread not joinable"),
+            (thread_resource_error(system::errc::invalid_argument, "boost thread: thread not joinable")),
             false
           );
         }

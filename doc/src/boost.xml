@@ -2,7 +2,7 @@
 <!DOCTYPE boostbook PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <boostbook id="boost" xmlns:xi="http://www.w3.org/2001/XInclude"
-           last-revision="$Date$">
+           last-revision="$Date: 2012-12-15 10:28:27 -0800 (Sat, 15 Dec 2012) $">
   <title>The Boost C++ Libraries BoostBook Documentation Subset</title>
 
   <preface id="about">
@@ -451,8 +451,18 @@
      </libraryinfo>
    </library>
 
+   <library name="Multi Array" dirname="multi_array" html-only="1">
+     <libraryinfo>
+       <author>
+         <firstname>Ron</firstname>
+         <surname>Garcia</surname>
+       </author>
 
-   <xi:include href="../../libs/multi_array/doc/xml/bbref.xml"/>
+       <librarypurpose>Multidimensional containers and adaptors for arrays of contiguous data</librarypurpose>
+       <librarycategory name="category:math"/>
+       <librarycategory name="category:containers"/>
+     </libraryinfo>
+   </library>
 
    <library name="Operators" dirname="utility" html-only="1">
      <libraryinfo>

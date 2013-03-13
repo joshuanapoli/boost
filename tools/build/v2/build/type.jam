@@ -7,12 +7,13 @@
 #  typed targets.
 
 import "class" : new ;
+import errors ;
 import feature ;
 import generators : * ;
-import os ;
 import project ;
 import property ;
 import scanner ;
+import os ;
 
 # The following import would create a circular dependency:
 # project -> project-root -> builtin -> type -> targets -> project
@@ -38,23 +39,20 @@ rule register ( type : suffixes * : base-type ? )
     # decomposed.
     switch $(type)
     {
-        case *-* :
-            import errors ;
-            errors.error "type name \"$(type)\" contains a hyphen" ;
+        case *-* : errors.error "type name \"$(type)\" contains a hyphen" ;
     }
 
     if $(type) in $(.types)
     {
-        import errors ;
         errors.error "Type $(type) is already registered." ;
     }
-
+    else
     {
         .types += $(type) ;
         .base.$(type) = $(base-type) ;
         .derived.$(base-type) += $(type) ;
 
-        if $(suffixes)-is-defined
+        if $(suffixes)-is-not-empty
         {
             # Specify mapping from suffixes to type.
             register-suffixes $(suffixes) : $(type) ;
@@ -121,7 +119,6 @@ rule register-suffixes ( suffixes + : type )
         }
         else if $(.type.$(s)) != $(type)
         {
-            import errors ;
             errors.error Attempting to specify multiple types for suffix
                 \"$(s)\" : "Old type $(.type.$(s)), New type $(type)" ;
         }
@@ -146,7 +143,6 @@ rule validate ( type )
 {
     if ! [ registered $(type) ]
     {
-        import errors ;
         errors.error "Unknown target type $(type)" ;
     }
 }
@@ -340,7 +336,7 @@ local rule generated-target-ps-real ( ps : type : properties * )
         # If the prefix/suffix is explicitly set to an empty string, we consider
         # prefix/suffix to be found. If we were not to compare with "", there
         # would be no way to specify an empty prefix/suffix.
-        if $(result)-is-defined
+        if $(result)-is-not-empty
         {
             found = true ;
         }
@@ -385,7 +381,7 @@ rule type ( filename )
     if [ os.name ] in NT CYGWIN
     {
         filename = $(filename:L) ;
-    }
+    }    
     local type ;
     while ! $(type) && $(filename:S)
     {

@@ -5,7 +5,7 @@
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  *
- * $Id$
+ * $Id: test_piecewise_linear_distribution.cpp 81851 2012-12-11 14:42:26Z marshall $
  *
  */
 

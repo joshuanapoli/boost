@@ -134,7 +134,7 @@ the first call) and [arg_desc] of `seq`.
         >
     typename result_of_name_macro<Sequence, State const, F>::type name_macro(
         Sequence& seq, State const& initial_state, F f);
-
+        
     template<
         typename Sequence,
         typename State,

@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at 
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 63441 $
 //
 //  Description : as a central place for global configuration switches
 // ***************************************************************************
@@ -18,18 +18,6 @@
 // Boost
 #include <boost/config.hpp> // compilers workarounds
 #include <boost/detail/workaround.hpp>
-
-#if defined(_WIN32) && !defined(BOOST_DISABLE_WIN32) &&                  \
-    (!defined(__COMO__) && !defined(__MWERKS__) && !defined(__GNUC__) || \
-    BOOST_WORKAROUND(__MWERKS__, >= 0x3000))
-#  define BOOST_SEH_BASED_SIGNAL_HANDLING
-#endif
-
-#if defined(__COMO__) && defined(_MSC_VER)
-// eh.h uses type_info without declaring it.
-class type_info;
-#  define BOOST_SEH_BASED_SIGNAL_HANDLING
-#endif
 
 //____________________________________________________________________________//
 
@@ -81,12 +69,6 @@ class type_info;
     !BOOST_WORKAROUND(BOOST_MSVC, <1310) && \
     !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x530))
 #  define BOOST_TEST_SUPPORT_INTERACTION_TESTING 1
-#endif
-
-//____________________________________________________________________________//
-
-#if !defined(__BORLANDC__) && !BOOST_WORKAROUND( BOOST_MSVC, < 1300 ) && !BOOST_WORKAROUND( __SUNPRO_CC, < 0x5100 )
-#define BOOST_TEST_SUPPORT_TOKEN_ITERATOR 1
 #endif
 
 //____________________________________________________________________________//

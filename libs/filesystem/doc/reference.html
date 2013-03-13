@@ -134,12 +134,7 @@ del   { background-color:#FFA0A0 }
 <a href="#Class-directory_iterator">Class  <code>directory_iterator</code></a><br>
 &nbsp;&nbsp;&nbsp; <a href="#directory_iterator-members"><code>directory_iterator</code> 
     members</a><br>
-&nbsp; <code>&nbsp;<a href="#directory_iterator-non-member-functions">directory_iterator</a></code><a href="#directory_iterator-members"> 
-    non-member functions</a><br>
 <a href="#Class-recursive_directory_iterator">Class <code>recursive_directory_iterator</code></a><br>
-    <code>&nbsp; <a href="#recursive_directory_iterator-non-member-functions">
-    recursive_directory_iterator</a></code><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#recursive_directory_iterator-non-member-functions">&nbsp;non-member functions</a><br>
     <a href="#Operational-functions">
     Operational functions</a><br>
     <code>&nbsp;&nbsp;&nbsp;&nbsp <a href="#absolute">absolute</a><br>
@@ -707,6 +702,7 @@ system or for a particular file system.</p>
         
         // <a href="#path-modifiers">modifiers</a>
         void  <a href="#path-clear">clear</a>();
+        path&amp; <a href="#absolute">make_absolute</a>(const path&amp; base);
         path&amp; <a href="#path-make_preferred">make_preferred</a>();  // ISO/IEC 9945: no effect. Windows: convert slashes to backslashes
         path&amp; <a href="#path-remove_filename">remove_filename</a>();
         path&amp; <a href="#path-replace_extension">replace_extension</a>(const path&amp; new_extension = path());
@@ -1466,7 +1462,7 @@ reference documentation.</p>
     </tr>
   </table>
 </blockquote>
-<pre><a name="filesystem_error-3-arg">filesystem_error</a>(const std::string&amp; what_arg, const path&amp; p1, error_code ec);</pre>
+<pre><a name="filesystem_error-3-arg">filesystem_error</a>(const std::string&amp; what_arg, const path_type&amp; p1, error_code ec);</pre>
 <blockquote>
   <p><i>Postcondition:</i></p>
   <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="46%">
@@ -1494,7 +1490,7 @@ reference documentation.</p>
     </tr>
   </table>
 </blockquote>
-<pre><a name="filesystem_error-4-arg">filesystem_error</a>(const std::string&amp; what_arg, const path&amp; p1, const path&amp; p2, error_code ec);</pre>
+<pre><a name="filesystem_error-4-arg">filesystem_error</a>(const std::string&amp; what_arg, const path_type&amp; p1, const path_type&amp; p2, error_code ec);</pre>
 <blockquote>
   <p><i>Postcondition:</i></p>
   <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="46%">
@@ -1761,13 +1757,13 @@ and permissions of a file.</p>
         // <a href="#directory_entry-constructors">constructors</a> and destructor
         directory_entry();
         directory_entry(const directory_entry&amp;);
-        explicit directory_entry(const path&amp; p, file_status st=file_status(),
+        explicit directory_entry(const path_type&amp; p, file_status st=file_status(),
           file_status symlink_st=file_status());
        ~directory_entry(); 
 
         // <a href="#directory_entry-modifiers">modifiers</a>
         directory_entry&amp; operator=(const directory_entry&amp;);
-        void assign(const path&amp; p, file_status st=file_status(),
+        void assign(const path_type&amp; p, file_status st=file_status(),
           file_status symlink_st=file_status());
         void replace_filename(const path&amp; p, file_status st=file_status(),
           file_status symlink_st=file_status());
@@ -1787,7 +1783,7 @@ and permissions of a file.</p>
         bool operator&gt; (const directory_entry&amp; rhs);
         bool operator&gt;=(const directory_entry&amp; rhs);
       private:
-        path            m_path;           // for exposition only
+        path_type            m_path;           // for exposition only
         mutable file_status  m_status;         // for exposition only; stat()-like
         mutable file_status  m_symlink_status; // for exposition only; lstat()-like
       };
@@ -1831,7 +1827,7 @@ systems that provide status as a by-product of directory iteration.</i></span></
     </tr>
   </table>
 </blockquote>
-<pre>explicit directory_entry(const path&amp; p, file_status st=file_status(), file_status symlink_st=file_status());</pre>
+<pre>explicit directory_entry(const path_type&amp; p, file_status st=file_status(), file_status symlink_st=file_status());</pre>
 <blockquote>
   <p><i>Postcondition:</i></p>
   <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="36%">
@@ -1854,7 +1850,7 @@ systems that provide status as a by-product of directory iteration.</i></span></
   </table>
 </blockquote>
 <h4> <a name="directory_entry-modifiers"> <code>directory_entry </code>modifiers</a></h4>
-<pre>void assign(const path&amp; p, file_status st=file_status(), file_status symlink_st=file_status());</pre>
+<pre>void assign(const path_type&amp; p, file_status st=file_status(), file_status symlink_st=file_status());</pre>
 <blockquote>
   <p><i>Postcondition:</i></p>
   <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="36%">
@@ -2061,15 +2057,6 @@ directory_iterator&amp; increment(system::error_code&amp; ec);</pre>
 <p><i>Throws:</i> As specified in <a href="#Error-reporting">Error reporting</a>.</p>
 
 </blockquote>
-<h3><a name="directory_iterator-non-member-functions"><code>directory_iterator</code> non-member functions</a></h3>
-<pre>const directory_iterator&amp; begin(const directory_iterator&amp; iter);</pre>
-<blockquote>
-  <p><i>Returns: </i><code>iter</code>.</p>
-</blockquote>
-<pre>directory_iterator end(const directory_iterator&amp;);</pre>
-<blockquote>
-  <p><i>Returns: </i><code>directory_iterator()</code>.</p>
-</blockquote>
 <h3><a name="Class-recursive_directory_iterator">Class <code>recursive_directory_iterator</code></a></h3>
 <p>Objects of type <code>recursive_directory_iterator</code> provide standard library 
 compliant iteration over the contents of a directory, including recursion into 
@@ -2206,15 +2193,6 @@ is decremented and iteration of the parent directory resumes.</li>
 <p><i>Postcondition:</i> <code>no_push_pending() == value</code>.</p>
   <p>[<i>Note:</i> <code>no_push()</code> is used to prevent 
   unwanted recursion into a directory. <i>--end note</i>]</p>
-</blockquote>
-<h3><a name="recursive_directory_iterator-non-member-functions"><code>recursive_directory_iterator</code> non-member functions</a></h3>
-<pre>const recursive_directory_iterator&amp; begin(const recursive_directory_iterator&amp; iter);</pre>
-<blockquote>
-  <p><i>Returns: </i><code>iter</code>.</p>
-</blockquote>
-<pre>recursive_directory_iterator end(const recursive_directory_iterator&amp;);</pre>
-<blockquote>
-  <p><i>Returns: </i><code>recursive_directory_iterator()</code>.</p>
 </blockquote>
 <h3><a name="Operational-functions">Operational functions</a></h3>
 <p>Operational functions query or modify files, including directories, in external 
@@ -3497,7 +3475,7 @@ multiple string types. His idea became the basis for the version 3 path design.<
 </font>
 <a href="http://www.boost.org/LICENSE_1_0.txt"><font size="2">www.boost.org/LICENSE_1_0.txt</font></a></p>
 <p><font size="2">Revised
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->21 September 2012<!--webbot bot="Timestamp" endspan i-checksum="39619" --></font></p>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->09 August 2012<!--webbot bot="Timestamp" endspan i-checksum="31334" --></font></p>
 
 
 </body></html>

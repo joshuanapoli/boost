@@ -11,6 +11,10 @@
 #include <stdint.h>
 #endif
 
+#if defined(_WIN32_WCE)
+typedef int intptr_t;
+#endif
+
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
 
