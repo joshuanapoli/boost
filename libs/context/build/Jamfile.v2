@@ -125,8 +125,8 @@ alias asm_context_sources
    ;
 
 alias asm_context_sources
-   : [ make asm/make_arm_aapcs_pe_armasm.o : asm/make_arm_aapcs_pe_armasm.S : @armasm ]
-     [ make asm/jump_arm_aapcs_pe_armasm.o : asm/jump_arm_aapcs_pe_armasm.S : @armasm ]
+   : [ make asm/make_arm_aapcs_pe_armasm.o : asm/make_arm_aapcs_pe_armasm.asm : @armasm ]
+     [ make asm/jump_arm_aapcs_pe_armasm.o : asm/jump_arm_aapcs_pe_armasm.asm : @armasm ]
    : <architecture>arm
      <binary-format>pe
    ;
@@ -284,6 +284,7 @@ alias asm_context_sources
 alias asm_context_sources
    : asm/make_i386_ms_pe_masm.asm
      asm/jump_i386_ms_pe_masm.asm
+     dummy.cpp
    : <address-model>32
      <architecture>x86
      <binary-format>pe
@@ -294,6 +295,7 @@ alias asm_context_sources
 alias asm_context_sources
    : asm/make_i386_ms_pe_masm.asm
      asm/jump_i386_ms_pe_masm.asm
+     dummy.cpp
    : <address-model>32
      <architecture>x86
      <binary-format>pe
@@ -304,6 +306,7 @@ alias asm_context_sources
 alias asm_context_sources
    : [ make asm/make_i386_ms_pe_masm.o : asm/make_i386_ms_pe_masm.asm : @masm ]
      [ make asm/jump_i386_ms_pe_masm.o : asm/jump_i386_ms_pe_masm.asm : @masm ]
+     dummy.cpp
    : <address-model>32
      <architecture>x86
      <binary-format>pe
@@ -378,6 +381,7 @@ alias asm_context_sources
 alias asm_context_sources
    : asm/make_x86_64_ms_pe_masm.asm
      asm/jump_x86_64_ms_pe_masm.asm
+     dummy.cpp
    : <address-model>64
      <architecture>x86
      <binary-format>pe
@@ -388,6 +392,7 @@ alias asm_context_sources
 alias asm_context_sources
    : asm/make_x86_64_ms_pe_masm.asm
      asm/jump_x86_64_ms_pe_masm.asm
+     dummy.cpp
    : <address-model>64
      <architecture>x86
      <binary-format>pe
@@ -398,6 +403,7 @@ alias asm_context_sources
 alias asm_context_sources
    : [ make asm/make_x86_64_ms_pe_masm.o : asm/make_x86_64_ms_pe_masm.asm : @masm64 ]
      [ make asm/jump_x86_64_ms_pe_masm.o : asm/jump_x86_64_ms_pe_masm.asm : @masm64 ]
+     dummy.cpp
    : <address-model>64
      <architecture>x86
      <binary-format>pe

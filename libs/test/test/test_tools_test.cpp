@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 57993 $
 //
 //  Description : tests all Test Tools but output_test_stream
 // ***************************************************************************
@@ -16,9 +16,9 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/output_test_stream.hpp>
 #include <boost/test/execution_monitor.hpp>
-#include <boost/test/unit_test_parameters.hpp>
+#include <boost/test/detail/unit_test_parameters.hpp>
 #include <boost/test/output/compiler_log_formatter.hpp>
 #include <boost/test/framework.hpp>
 
@@ -100,10 +100,7 @@ void name ## _impl_defer();                                 \
                                                             \
 BOOST_AUTO_TEST_CASE( name )                                \
 {                                                           \
-    test_case* impl = make_test_case( &name ## _impl,       \
-                                      #name,                \
-                                      __FILE__,             \
-                                      __LINE__ );           \
+    test_case* impl = make_test_case( &name ## _impl, #name ); \
                                                             \
     unit_test_log.set_stream( ots() );                      \
     unit_test_log.set_threshold_level( log_nothing );       \
@@ -272,10 +269,7 @@ TEST_CASE( test_BOOST_CHECK_THROW )
     CHECK_CRITICAL_TOOL_USAGE( BOOST_REQUIRE_THROW( i++, my_exception ) );
 
     unit_test_log.set_threshold_level( log_successful_tests );
-    if( i/10 > 10 )
-    {}
-    else 
-        BOOST_CHECK_THROW( throw my_exception(), my_exception ); // unreachable code warning is expected
+    BOOST_CHECK_THROW( throw my_exception(), my_exception ); // unreachable code warning is expected
 }
 
 //____________________________________________________________________________//
@@ -293,9 +287,7 @@ TEST_CASE( test_BOOST_CHECK_EXCEPTION )
 TEST_CASE( test_BOOST_CHECK_NO_THROW )
 {
     int i=0;
-    if( i*10 == 0 )
-        BOOST_CHECK_NO_THROW( i++ );
-    else {}
+    BOOST_CHECK_NO_THROW( i++ );
 
     BOOST_CHECK_NO_THROW( throw my_exception() ); // unreachable code warning is expected
 }
@@ -556,7 +548,7 @@ TEST_CASE( test_BOOST_TEST_PASSPOINT )
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_CASE( test_BOOST_IS_DEFINED )
+TEST_CASE( test_BOOST_IS_DEFINED )
 {
 #define SYMBOL1
 #define SYMBOL2 std::cout
@@ -570,172 +562,6 @@ BOOST_AUTO_TEST_CASE( test_BOOST_IS_DEFINED )
     BOOST_CHECK( !BOOST_IS_DEFINED( ONE_ARG1(arg1) ) );
     BOOST_CHECK( BOOST_IS_DEFINED( TWO_ARG(arg1,arg2) ) );
     BOOST_CHECK( !BOOST_IS_DEFINED( TWO_ARG1(arg1,arg2) ) );
-}
-
-//____________________________________________________________________________//
-
-int goo()
-{
-    static int i = 0;
-    return i++;
-}
-
-struct Foo : boost::noncopyable {
-    static int copy_counter;
-
-    Foo() {}
-    Foo( Foo const& ) { copy_counter++; }
-};
-
-int Foo::copy_counter = 0;
-
-bool operator==( Foo const&, Foo const& ) { return true; }
-std::ostream& operator<<( std::ostream& os, Foo const& ) { return os << "Foo"; }
-
-BOOST_AUTO_TEST_CASE( test_argument_handling )
-{
-    BOOST_CHECK_EQUAL( goo(), 0 );
-    BOOST_CHECK_EQUAL( goo(), 1 );
-    BOOST_CHECK_EQUAL( 2, goo() );
-    BOOST_CHECK_EQUAL( 3, goo() );
-    BOOST_CHECK_NE( goo(), 5 );
-    BOOST_CHECK_EQUAL( Foo(), Foo() );
-    BOOST_CHECK_EQUAL( Foo::copy_counter, 0 );
-}
-
-//____________________________________________________________________________//
-
-TEST_CASE( test_context_logging )
-{
-    BOOST_TEST_INFO( "some context" );
-    BOOST_CHECK( false );
-
-    int i = 12;
-    BOOST_TEST_INFO( "some more context: " << i );
-    BOOST_CHECK( false );
-
-    BOOST_TEST_INFO( "info 1" );
-    BOOST_TEST_INFO( "info 2" );
-    BOOST_TEST_INFO( "info 3" );
-    BOOST_CHECK( false );
-
-    BOOST_TEST_CONTEXT( "some sticky context" ) {
-        BOOST_CHECK( false );
-
-        BOOST_TEST_INFO( "more context" );
-        BOOST_CHECK( false );
-
-        BOOST_TEST_INFO( "different subcontext" );
-        BOOST_CHECK( false );
-    }
-
-    BOOST_TEST_CONTEXT( "outer context" ) {
-        BOOST_CHECK( false );
-
-        BOOST_TEST_CONTEXT( "inner context" ) {
-            BOOST_CHECK( false );
-        }
-
-        BOOST_CHECK( false );
-    }
-}
-
-//____________________________________________________________________________//
-
-class FooType {
-public:
-    FooType&    operator*()     { return *this; }
-    operator    bool() const    { return false; }
-    int         operator&()     { return 10; }
-};
-
-#ifndef BOOST_NO_CXX11_DECLTYPE
-#define BOOST_TEST_FWD_1(P,M) BOOST_TEST(P)
-#define BOOST_TEST_FWD_3(P,M) BOOST_TEST(P)
-#else
-#define BOOST_TEST_FWD_1(P,M) BOOST_CHECK_MESSAGE( P, M );
-#define BOOST_TEST_FWD_3(P,M) BOOST_ERROR(M)
-#endif
-
-#if BOOST_PP_VARIADICS
-#define BOOST_TEST_FWD_2(P,M) BOOST_TEST(P,M)
-#else
-#define BOOST_TEST_FWD_2(P,M) BOOST_CHECK_MESSAGE( P, M );
-#endif
-
-TEST_CASE( test_BOOST_TEST_universal )
-{
-    unit_test_log.set_threshold_level( log_successful_tests );
-
-    BOOST_TEST( true );
-    BOOST_TEST( false );
-
-    bool_convertible bc;
-    BOOST_TEST( bc );
-
-    int i = 1;
-    BOOST_TEST( i == 2 );
-    BOOST_TEST( i != 1 );
-    BOOST_TEST( i > 2 );
-    BOOST_TEST( i < 1 );
-    BOOST_TEST( i <= 0 );
-    BOOST_TEST( i >= 5 );
-
-    int j = 2;
-    BOOST_TEST_FWD_1( i+j >= 5, "check i+j >= 5 failed [1 + 2 < 5]" );
-    BOOST_TEST_FWD_1( j-i == 2, "check j-i == 2 failed [2 - 1 != 2]" );
-
-    int* p = &i;
-    BOOST_TEST( *p == 2 );
-
-    BOOST_TEST_FWD_1( j-*p == 0, "check j-*p == 0 failed [2 - 1 != 0]" );
-
-    BOOST_TEST(( i > 5, true ));
-
-    FooType F;
-
-    BOOST_TEST( FooType() );
-    BOOST_TEST( *F );
-    BOOST_TEST( **F );
-    BOOST_TEST( ***F );
-    BOOST_TEST( &F > 100 );
-    BOOST_TEST( &*F > 100 );
-
-    BOOST_TEST_FWD_1( (i == 1) & (j == 1), "check (i == 1) & (j == 1) failed [1 & 0]" );
-    BOOST_TEST_FWD_1( (i == 2) | (j == 1), "check (i == 2) | (j == 1) failed [0 | 0]" );
-
-    BOOST_TEST(( i == 1 && j == 1 ));
-    BOOST_TEST(( i == 2 || j == 1 ));
-
-    BOOST_TEST_FWD_2( i+j==15,"This message reported instead");
-
-    // check correct behavior in if clause
-    if( true )
-        BOOST_TEST( true );
-
-    // check correct behavior in else clause
-    if( false )
-    {}
-    else
-        BOOST_TEST( true );
-
-    std::vector<int> v;
-    v.push_back( 1 );
-    v.push_back( 2 );
-    v.push_back( 3 );
-
-    std::list<int> l;
-    l.push_back( 1 );
-    l.push_back( 3 );
-    l.push_back( 2 );
-
-    BOOST_TEST_FWD_3( v <= l, "check v <= l failed.\nMismatch in a position 2: 3 > 2" );
-    BOOST_TEST_FWD_3( v == l, "check v == l failed.\nMismatch in a position 1: 2 != 3\nMismatch in a position 2: 3 != 2" );
-
-    // Does not work
-    // BOOST_TEST( i == 1 && j == 1 );
-    // BOOST_TEST( i == 2 || j == 1 );
-    // BOOST_TEST( i > 5 ? false : true );
 }
 
 //____________________________________________________________________________//

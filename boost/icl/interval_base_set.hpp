@@ -175,7 +175,7 @@ public:
         return *this; 
     }
 
-#   ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+#   ifndef BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
     //==========================================================================
     //= Move semantics
     //==========================================================================
@@ -195,7 +195,7 @@ public:
     }
 
     //==========================================================================
-#   endif // BOOST_NO_CXX11_RVALUE_REFERENCES
+#   endif // BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
 
     /** swap the content of containers */
     void swap(interval_base_set& operand) { _set.swap(operand._set); }
@@ -231,6 +231,7 @@ public:
     const_iterator find(const element_type& key_value)const
     { 
         return icl::find(*this, key_value);
+        //CL return this->_set.find(icl::singleton<segment_type>(key)); 
     }
 
     /** Find the first interval, that collides with interval \c key_interval */

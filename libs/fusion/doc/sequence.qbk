@@ -189,7 +189,6 @@ are not defined in __forward_sequence__.
 * __std_pair__
 * __boost_array__
 * __vector__
-* __map__
 * __reverse_view__
 * __single_view__
 * __iterator_range__ (where adapted sequence is a Bidirectional Sequence)
@@ -266,7 +265,6 @@ are not defined in __bidirectional_sequence__.
 * __std_pair__
 * __boost_array__
 * __vector__
-* __map__
 * __reverse_view__
 * __single_view__
 * __iterator_range__ (where adapted sequence is a Random Access Sequence)
@@ -283,7 +281,6 @@ An Associative Sequence allows efficient retrieval of elements based on keys.
 Like associative sequences in __mpl__, and unlike associative containers in
 __stl__, Fusion associative sequences have no implied ordering relation.
 Instead, type identity is used to impose an equivalence relation on keys.
-Keys are not checked for uniqueness.
 
 [variablelist Notation
     [[`s`]       [An Associative Sequence]]
@@ -851,7 +848,7 @@ Performs an element by element swap of the elements in 2 sequences.
 
 [table
     [[Parameters]    [Requirement]                           [Description]]
-    [[`seq1`, `seq2`][Models of __forward_sequence__][The sequences whos elements we wish to swap.]]
+    [[`seq1`, `seq2`]        [Models of __forward_sequence__][The sequences whos elements we wish to swap.]]
 ]
 
 [heading Expression Semantics]
@@ -1379,7 +1376,7 @@ Returns the actual element type associated with a Key from the __sequence__.
 
     #include <boost/fusion/sequence/intrinsic/value_at_key.hpp>
     #include <boost/fusion/include/value_at_key.hpp>
-
+    
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
     BOOST_MPL_ASSERT((boost::is_same<__result_of_at_key__<mymap, int>::type, char>));

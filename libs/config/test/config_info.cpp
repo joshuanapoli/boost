@@ -11,7 +11,7 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 //
-//  Revision $Id$
+//  Revision $Id: config_info.cpp 81827 2012-12-10 17:26:30Z johnmaddock $
 //
 
 #include <boost/config.hpp>

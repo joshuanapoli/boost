@@ -1,5 +1,0 @@
-using boostbook ;
-
-boostbook standalone
-	: array.xml 
-	: <xsl:param>boost.root=../../../.. ;

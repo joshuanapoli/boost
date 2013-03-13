@@ -110,6 +110,7 @@ path-constant LEX_DIR : $(BOOST_ROOT)/libs/spirit/test/lex ;
      [ run qi/pass_container2.cpp  : : : : qi_pass_container2 ]
      [ run qi/permutation.cpp      : : : : qi_permutation ]
      [ run qi/plus.cpp             : : : : qi_plus ]
+     [ run qi/uint_radix.cpp       : : : : qi_uint_radix ]
      [ run qi/range_run.cpp        : : : : qi_range_run ]
      [ run qi/raw.cpp              : : : : qi_raw ]
      [ run qi/real1.cpp            : : : : qi_real1 ]
@@ -133,7 +134,7 @@ path-constant LEX_DIR : $(BOOST_ROOT)/libs/spirit/test/lex ;
      [ run qi/uint1.cpp            : : : : qi_uint1 ]
      [ run qi/uint2.cpp            : : : : qi_uint2 ]
      [ run qi/uint3.cpp            : : : : qi_uint3 ]
-     [ run qi/uint_radix.cpp       : : : : qi_uint_radix ]
+#     [ run qi/uint_radix.cpp       : : : : qi_uint_radix ]
      [ run qi/utree1.cpp           : : : : qi_utree1 ]
      [ run qi/utree2.cpp           : : : : qi_utree2 ]
      [ run qi/utree3.cpp           : : : : qi_utree3 ]
@@ -253,6 +254,7 @@ path-constant LEX_DIR : $(BOOST_ROOT)/libs/spirit/test/lex ;
      [ run karma/regression_container_variant_sequence.cpp : : : :  karma_regression_container_variant_sequence ]
      [ run karma/regression_real_0.cpp                     : : : :  karma_regression_real_0 ]
      [ run karma/regression_unicode_char.cpp               : : : :  karma_regression_unicode_char ]
+     [ run karma/regression_iterator.cpp                   : : : :  karma_regression_iterator ]
 
     ;
 

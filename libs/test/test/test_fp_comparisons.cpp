@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 54633 $
 //
 //  Description : tests floating point comparison algorithms
 // ***************************************************************************
@@ -15,6 +15,8 @@
 // Boost.Test
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+#include <boost/test/test_case_template.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 
 // Boost
 #include <boost/mpl/list.hpp>
@@ -48,9 +50,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_BOOST_CHECK_CLOSE, FPT, test_types )
     fp2     = static_cast<FPT>(second);     \
     epsilon = static_cast<FPT>(e);          \
                                             \
-    BOOST_CHECK_PREDICATE(                  \
-        bind(not_func, bind(check_is_close, _1, _2, _3)),  \
-        (fp1)(fp2)(::fpc::percent_tolerance( epsilon )) ); \
+    BOOST_CHECK_PREDICATE( bind(not_func, bind(check_is_close, _1, _2, _3)),  \
+        (fp1)(fp2)(percent_tolerance( epsilon )) ); \
 /**/
 
     FPT fp1, fp2, epsilon;
@@ -98,9 +99,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_CHECK_CLOSE_FRACTION, FPT, test_types )
     fp2     = static_cast<FPT>(second);     \
     epsilon = static_cast<FPT>(e);          \
                                             \
-    BOOST_CHECK_PREDICATE(                  \
-        bind(not_func, bind(check_is_close, _1, _2, _3)),  \
-        (fp1)(fp2)(epsilon) );              \
+    BOOST_CHECK_PREDICATE( bind(not_func, bind(check_is_close, _1, _2, _3)),  \
+        (fp1)(fp2)(fraction_tolerance( epsilon )) ); \
 /**/
 
     FPT fp1, fp2, epsilon;
@@ -152,28 +152,26 @@ BOOST_AUTO_TEST_CASE( test_CHECK_SMALL )
 
 //____________________________________________________________________________//
 
-namespace fpc = boost::math::fpc;
-
 BOOST_AUTO_TEST_CASE( test_close_at_tolerance )
 {
     double fp1     = 1.00000001;
     double fp2     = 1.00000002;
     double epsilon = 1e-6;
 
-    ::fpc::close_at_tolerance<double> pred( ::fpc::percent_tolerance( epsilon ), ::fpc::FPC_WEAK );
+    close_at_tolerance<double> pred( percent_tolerance( epsilon ), FPC_WEAK );
     BOOST_CHECK_PREDICATE( pred, (fp1)(fp2) );
 
     BOOST_CHECK_PREDICATE( bind(not_func, bind(check_is_close, _1, _2, _3)), 
-                           (fp1)(fp2)( ::fpc::percent_tolerance( epsilon )) );
+                           (fp1)(fp2)(percent_tolerance( epsilon )) );
 
     fp1     = 1.23456e-10;
     fp2     = 1.23457e-10;
     epsilon = 8.1e-4;
 
-    BOOST_CHECK_PREDICATE( ::fpc::close_at_tolerance<double>( ::fpc::percent_tolerance( epsilon ), ::fpc::FPC_WEAK ), (fp1)(fp2) );
+    BOOST_CHECK_PREDICATE( close_at_tolerance<double>( percent_tolerance( epsilon ), FPC_WEAK ), (fp1)(fp2) );
     BOOST_CHECK_PREDICATE( 
         bind(not_func, 
-             bind( ::fpc::close_at_tolerance<double>( ::fpc::percent_tolerance( epsilon ) ), _1, _2)), (fp1)(fp2) );
+             bind(close_at_tolerance<double>( percent_tolerance( epsilon ) ), _1, _2)), (fp1)(fp2) );
 }
 
 //____________________________________________________________________________//

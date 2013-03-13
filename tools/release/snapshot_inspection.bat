@@ -12,7 +12,7 @@ rem inspect_trunk.bat builds inspect program every day and copies it to %UTIL%
 popd
 
 echo Create ftp script...
-copy %BOOST_TRUNK%\..\boost_ftp_user.txt inspect.ftp
+copy user.txt inspect.ftp
 echo dir >>inspect.ftp
 echo binary >>inspect.ftp
 echo put inspect.html >>inspect.ftp

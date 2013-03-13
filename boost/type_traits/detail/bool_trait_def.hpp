@@ -8,8 +8,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 // $Source$
-// $Date$
-// $Revision$
+// $Date: 2011-10-09 15:28:33 -0700 (Sun, 09 Oct 2011) $
+// $Revision: 74865 $
 
 #include <boost/type_traits/detail/template_arity_spec.hpp>
 #include <boost/type_traits/integral_constant.hpp>

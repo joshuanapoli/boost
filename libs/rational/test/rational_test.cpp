@@ -13,11 +13,6 @@
  *  extended, by Paul Moore, with permission.
  */
 
-// boostinspect:nolicense (don't complain about the lack of a Boost license)
-// (Stephen Silver hasn't been contacted yet for permission to change the
-// license.  If Paul Moore's permission is also needed, then that's a problem
-// since he hasn't been in contact for years.)
-
 // Revision History
 // 05 Nov 06  Add testing of zero-valued denominators & divisors; casting with
 //            types that are not implicitly convertible (Daryle Walker)
@@ -32,7 +27,6 @@
 #define BOOST_TEST_MAIN  "Boost::Rational unit tests"
 
 #include <boost/config.hpp>
-#include <boost/limits.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/operators.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -41,10 +35,13 @@
 #include <boost/rational.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/test_case_template.hpp>
 
 #include <climits>
 #include <iostream>
 #include <istream>
+#include <limits>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
@@ -231,10 +228,8 @@ class numeric_limits< MyInt >
 public:
     static const bool is_specialized = limits_type::is_specialized;
 
-    static MyInt min BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return
-     limits_type::min BOOST_PREVENT_MACRO_SUBSTITUTION (); }
-    static MyInt max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return
-     limits_type::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
+    static MyInt min BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::min)(); }
+    static MyInt max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::max)(); }
 
     static const int digits      = limits_type::digits;
     static const int digits10    = limits_type::digits10;
@@ -279,10 +274,8 @@ class numeric_limits< MyOverflowingUnsigned >
 public:
     static const bool is_specialized = limits_type::is_specialized;
 
-    static MyOverflowingUnsigned min BOOST_PREVENT_MACRO_SUBSTITUTION () throw()
-      { return limits_type::min BOOST_PREVENT_MACRO_SUBSTITUTION (); }
-    static MyOverflowingUnsigned max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()
-      { return limits_type::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
+    static MyOverflowingUnsigned min BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::min)(); }
+    static MyOverflowingUnsigned max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return (limits_type::max)(); }
 
     static const int digits      = limits_type::digits;
     static const int digits10    = limits_type::digits10;

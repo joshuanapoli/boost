@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at 
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 57993 $
 //
 //  Description : tests Unit Test Framework reporting facilities against
 //  pattern file
@@ -17,13 +17,17 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/results_reporter.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/output_test_stream.hpp>
 #include <boost/test/unit_test_log.hpp>
 #include <boost/test/unit_test_suite.hpp>
 #include <boost/test/framework.hpp>
-#include <boost/test/unit_test_parameters.hpp>
+#include <boost/test/detail/unit_test_parameters.hpp>
+#if BOOST_WORKAROUND(  __GNUC__, < 3 )
+typedef boost::test_tools::output_test_stream onullstream_type;
+#else
 #include <boost/test/utils/nullstream.hpp>
 typedef boost::onullstream onullstream_type;
+#endif
 
 // BOOST
 #include <boost/lexical_cast.hpp>
@@ -37,8 +41,6 @@ using namespace boost::unit_test;
 //____________________________________________________________________________//
 
 void good_foo() {}
-
-void almost_good_foo() { BOOST_TEST_WARN( 2>3 ); }
 
 void bad_foo()  { 
     onullstream_type null_out;
@@ -85,8 +87,8 @@ void check( output_test_stream& output, output_format report_format, test_unit_i
 
 void check( output_test_stream& output, test_unit_id id )
 {
-    check( output, OF_CLF, id );
-    check( output, OF_XML, id );
+    check( output, CLF, id );
+    check( output, XML, id );
 }
 
 //____________________________________________________________________________//
@@ -124,9 +126,6 @@ BOOST_AUTO_TEST_CASE( test_result_reports )
     test_suite* ts_1b = BOOST_TEST_SUITE( "1 bad test case inside" );
         ts_1b->add( BOOST_TEST_CASE( bad_foo ), 1 );
 
-    test_suite* ts_1c = BOOST_TEST_SUITE( "1 almost good test case inside" );
-        ts_1c->add( BOOST_TEST_CASE( almost_good_foo ) );
-
     test_suite* ts_2 = BOOST_TEST_SUITE( "2 test cases inside" );
         ts_2->add( BOOST_TEST_CASE( good_foo ) );
         ts_2->add( BOOST_TEST_CASE( bad_foo ), 1 );
@@ -150,9 +149,6 @@ BOOST_AUTO_TEST_CASE( test_result_reports )
 
     framework::run( ts_1b );
     check( test_output, ts_1b->p_id );
-
-    framework::run( ts_1c );
-    check( test_output, ts_1c->p_id );
 
     framework::run( ts_2 );
     check( test_output, ts_2->p_id );

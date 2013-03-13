@@ -22,6 +22,9 @@
 #include <cstdlib>
 #include <cassert>
 
+using namespace boost::system;
+using namespace boost::system::errc;
+
 #include <cstring> // for strerror/strerror_r
 
 # if defined( BOOST_WINDOWS_API )
@@ -33,21 +36,19 @@
 # endif
 
 //----------------------------------------------------------------------------//
-namespace boost
-{
-    namespace system
-    {
 
 namespace
 {
-    
+#if defined(__PGI)
+  using boost::system::errc::invalid_argument;
+#endif
   //  standard error categories  ---------------------------------------------//
 
   class generic_error_category : public error_category
   {
   public:
     generic_error_category(){}
-    const char *   name() const BOOST_SYSTEM_NOEXCEPT;
+    const char *   name() const;
     std::string    message( int ev ) const;
   };
 
@@ -55,25 +56,20 @@ namespace
   {
   public:
     system_error_category(){}
-    const char *        name() const BOOST_SYSTEM_NOEXCEPT;
+    const char *        name() const;
     std::string         message( int ev ) const;
-    error_condition     default_error_condition( int ev ) const BOOST_SYSTEM_NOEXCEPT;
+    error_condition     default_error_condition( int ev ) const;
   };
 
   //  generic_error_category implementation  ---------------------------------//
 
-  const char * generic_error_category::name() const BOOST_SYSTEM_NOEXCEPT
+  const char * generic_error_category::name() const
   {
     return "generic";
   }
 
   std::string generic_error_category::message( int ev ) const
   {
-    using namespace boost::system::errc;
-#if defined(__PGI)
-      using boost::system::errc::invalid_argument;
-#endif
-      
     static std::string unknown_err( "Unknown error" );
   // strerror_r is preferred because it is always thread safe,
   // however, we fallback to strerror in certain cases because:
@@ -137,9 +133,7 @@ namespace
         }
       }
       std::string msg;
-#   ifndef BOOST_NO_EXCEPTIONS
       try
-#   endif
       {
         msg = ( ( result == invalid_argument ) ? "Unknown error" : bp );
       }
@@ -160,18 +154,13 @@ namespace
   }
   //  system_error_category implementation  --------------------------------// 
 
-  const char * system_error_category::name() const BOOST_SYSTEM_NOEXCEPT
+  const char * system_error_category::name() const
   {
     return "system";
   }
 
-  error_condition system_error_category::default_error_condition( int ev ) const BOOST_SYSTEM_NOEXCEPT
+  error_condition system_error_category::default_error_condition( int ev ) const
   {
-    using namespace boost::system::errc;
-#if defined(__PGI)
-      using boost::system::errc::invalid_argument;
-#endif
-
     switch ( ev )
     {
     case 0: return make_error_condition( success );
@@ -412,6 +401,10 @@ namespace
 
 } // unnamed namespace
 
+namespace boost
+{
+  namespace system
+  {
 
 # ifndef BOOST_SYSTEM_NO_DEPRECATED
     BOOST_SYSTEM_DECL error_code throws; // "throw on error" special error_code;
@@ -421,13 +414,13 @@ namespace
                                          //  address for comparison purposes
 # endif
 
-    BOOST_SYSTEM_DECL const error_category & system_category() BOOST_SYSTEM_NOEXCEPT
+    BOOST_SYSTEM_DECL const error_category & system_category()
     {
       static const system_error_category  system_category_const;
       return system_category_const;
     }
 
-    BOOST_SYSTEM_DECL const error_category & generic_category() BOOST_SYSTEM_NOEXCEPT
+    BOOST_SYSTEM_DECL const error_category & generic_category()
     {
       static const generic_error_category generic_category_const;
       return generic_category_const;

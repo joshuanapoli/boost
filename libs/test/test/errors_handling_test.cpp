@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2001-2012.
+//  (C) Copyright Gennadiy Rozental 2001-2008.
 //  (C) Copyright Beman Dawes 2001.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,7 +9,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 49313 $
 //
 //  Description : tests an ability of Unit Test Framework to catch all kinds
 //  of test errors in a user code and properly report it.
@@ -18,14 +18,14 @@
 // Boost.Test
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/output_test_stream.hpp>
 #include <boost/test/unit_test_log.hpp>
 #include <boost/test/unit_test_suite.hpp>
 #include <boost/test/framework.hpp>
-#include <boost/test/tree/test_unit.hpp>
-#include <boost/test/unit_test_parameters.hpp>
+#include <boost/test/detail/unit_test_parameters.hpp>
 #include <boost/test/output/compiler_log_formatter.hpp>
 #include <boost/test/results_reporter.hpp>
+
 // STL
 #include <iostream>
 #include <stdexcept>

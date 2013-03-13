@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2003-2012.
+//  (C) Copyright Gennadiy Rozental 2003-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at 
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,13 +7,12 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 49313 $
 //
 //  Description : unit test for class properties facility
 // ***************************************************************************
 
 // Boost.Test
-#define BOOST_TEST_MODULE Boost.Test algorithms test
 #include <boost/test/unit_test.hpp>
 #include <boost/test/utils/class_properties.hpp>
 #include <boost/test/utils/basic_cstring/basic_cstring.hpp>
@@ -35,7 +34,7 @@ bool predicate( char c1, char c2 ) { return (std::toupper)( c1 ) == (std::touppe
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_CASE( test_mismatch )
+void test_mismatch()
 {
     const_string cs1( "test_string" );
     const_string cs2( "test_stream" );
@@ -56,7 +55,7 @@ BOOST_AUTO_TEST_CASE( test_mismatch )
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_CASE( test_find_first_not_of )
+void test_find_first_not_of()
 {
     const_string cs( "test_string" );
     const_string another( "tes" );
@@ -74,7 +73,7 @@ BOOST_AUTO_TEST_CASE( test_find_first_not_of )
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_CASE( test_find_last_of )
+void test_find_last_of()
 {
     const_string cs( "test_string" );
     const_string another( "tes" );
@@ -95,7 +94,7 @@ BOOST_AUTO_TEST_CASE( test_find_last_of )
 
 //____________________________________________________________________________//
 
-BOOST_AUTO_TEST_CASE( test_find_last_not_of )
+void test_find_last_not_of()
 {
     const_string cs( "test_string" );
     const_string another( "string" );
@@ -109,6 +108,21 @@ BOOST_AUTO_TEST_CASE( test_find_last_not_of )
 
     another = "e_string";
     BOOST_CHECK( utf::find_last_not_of( cs.begin(), cs.end(), another.begin(), another.end() ) == cs.end() );
+}
+
+//____________________________________________________________________________//
+
+utf::test_suite*
+init_unit_test_suite( int /* argc */, char* /* argv */ [] )
+{
+    utf::test_suite* test= BOOST_TEST_SUITE("Algorithms test");
+
+    test->add( BOOST_TEST_CASE( test_mismatch ) );
+    test->add( BOOST_TEST_CASE( test_find_first_not_of ) );
+    test->add( BOOST_TEST_CASE( test_find_last_of ) );
+    test->add( BOOST_TEST_CASE( test_find_last_not_of ) );
+
+    return test;
 }
 
 //____________________________________________________________________________//

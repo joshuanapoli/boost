@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2005-2012.
+//  (C) Copyright Gennadiy Rozental 2005-2008.
 //  Use, modification, and distribution are subject to the
 //  Boost Software License, ELOG_VER 1.0. (See accompanying file
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 54633 $
 //
 //  Description : Facilities to perform interaction based testng of logged expectations
 // ***************************************************************************
@@ -22,16 +22,16 @@
 
 #include <boost/test/detail/global_typedef.hpp>
 
+#include <boost/test/utils/callback.hpp>
 #include <boost/test/utils/iterator/token_iterator.hpp>
 
-#include <boost/test/interaction/interaction_based.hpp>
+#include <boost/test/interaction_based.hpp>
 #include <boost/test/test_tools.hpp>
 
 #include <boost/test/detail/suppress_warnings.hpp>
 
 // Boost
 #include <boost/lexical_cast.hpp>
-#include <boost/function/function0.hpp>
 
 // STL
 #include <fstream>
@@ -40,9 +40,9 @@
 
 namespace boost {
 
-namespace itest {
-
 using namespace ::boost::unit_test;
+
+namespace itest {
 
 // ************************************************************************** //
 // **************    logged expectation test implementation    ************** //
@@ -224,7 +224,7 @@ expectations_logger::return_value( const_string default_value )
 // ************************************************************************** //
 
 void BOOST_TEST_DECL
-logged_expectations( boost::function<void ()> const& F, const_string log_file_name, bool test_or_log )
+logged_expectations( callback0<> const& F, const_string log_file_name, bool test_or_log )
 {
     expectations_logger el( log_file_name, test_or_log );
 
@@ -234,7 +234,10 @@ logged_expectations( boost::function<void ()> const& F, const_string log_file_na
 //____________________________________________________________________________//
 
 }  // namespace itest
+
 } // namespace boost
+
+//____________________________________________________________________________//
 
 #include <boost/test/detail/enable_warnings.hpp>
 

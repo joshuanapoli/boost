@@ -6,7 +6,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/config for the most recent version.//
-//  Revision $Id$
+//  Revision $Id: no_rvalue_references_pass.cpp 79537 2012-07-15 15:59:05Z marshall $
 //
 
 

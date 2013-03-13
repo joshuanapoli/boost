@@ -282,9 +282,7 @@ flags('gcc.compile', 'OPTIONS', ['<warnings-as-errors>on'], ['-Werror'])
 
 flags('gcc.compile', 'OPTIONS', ['<debug-symbols>on'], ['-g'])
 flags('gcc.compile', 'OPTIONS', ['<profiling>on'], ['-pg'])
-
-flags('gcc.compile.c++', 'OPTIONS', ['<rtti>off'], ['-fno-rtti'])
-flags('gcc.compile.c++', 'OPTIONS', ['<exception-handling>off'], ['-fno-exceptions'])
+flags('gcc.compile', 'OPTIONS', ['<rtti>off'], ['-fno-rtti'])
 
 # On cygwin and mingw, gcc generates position independent code by default, and
 # warns if -fPIC is specified. This might not be the right way of checking if

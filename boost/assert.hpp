@@ -120,12 +120,7 @@ int print_dec( std::uint32_t x );
               << function << ":\n"
               << file << '(' << line << "): " << msg << std::endl;
 #endif
-			#ifdef UNDER_CE
-				// The Windows CE CRT library does not have abort() so use exit(-1) instead.
-				std::exit(-1);
-			#else
-				std::abort();
-			#endif
+            std::abort();
           }
         } // detail
       } // assertion

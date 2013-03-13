@@ -1,4 +1,4 @@
-//  (C) Copyright Gennadiy Rozental 2003-2012.
+//  (C) Copyright Gennadiy Rozental 2003-2008.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at 
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 //
 //  File        : $RCSfile$
 //
-//  Version     : $Revision$
+//  Version     : $Revision: 49313 $
 //
 //  Description : unit test for class properties facility
 // ***************************************************************************
@@ -137,7 +137,6 @@ BOOST_AUTO_TEST_CASE( test_readonly_property )
     BOOST_CHECK_EQUAL( p_two / 2, 1 );
 
     BOOST_CHECK( !p_b_ptr );
-
     C::init();
     BOOST_CHECK( p_b_ptr );
 
@@ -146,12 +145,6 @@ BOOST_AUTO_TEST_CASE( test_readonly_property )
     BOOST_CHECK( p_a_ptr );
     E::reset();
     BOOST_CHECK( p_a_ptr );
-
-    if( p_a_ptr )
-        delete p_a_ptr.get();
-
-    if( p_b_ptr )
-        delete p_b_ptr.get();
 }
 
 //____________________________________________________________________________//
@@ -186,6 +179,5 @@ BOOST_AUTO_TEST_CASE( test_readwrite_property )
 }
 
 //____________________________________________________________________________//
-
 
 // EOF
