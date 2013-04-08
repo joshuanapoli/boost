@@ -1,3 +1,0 @@
-project site-config ;
-alias cmsis : : : : <include>c:/MinGW/msys/1.0/opt/arm/CMSIS/Include ;
-alias cmsis-cm3 : cmsis : : : <include>c:/MinGW/msys/1.0/opt/arm/Device/ARM/ARMCM3/Include ;
