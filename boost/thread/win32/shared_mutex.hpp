@@ -36,6 +36,15 @@ namespace boost
                 exclusive_waiting:7,
                 exclusive_waiting_blocked:1;
 
+            state_data()
+              : shared_count(0)
+              , shared_waiting(0)
+              , exclusive(0)
+              , upgrade(0)
+              , exclusive_waiting(0)
+              , exclusive_waiting_blocked(0)
+            {}
+
             friend bool operator==(state_data const& lhs,state_data const& rhs)
             {
                 return *reinterpret_cast<unsigned const*>(&lhs)==*reinterpret_cast<unsigned const*>(&rhs);
@@ -47,10 +56,13 @@ namespace boost
         T interlocked_compare_exchange(T* target,T new_value,T comparand)
         {
             BOOST_STATIC_ASSERT(sizeof(T)==sizeof(long));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
             long const res=BOOST_INTERLOCKED_COMPARE_EXCHANGE(reinterpret_cast<long*>(target),
                                                               *reinterpret_cast<long*>(&new_value),
                                                               *reinterpret_cast<long*>(&comparand));
             return *reinterpret_cast<T const*>(&res);
+#pragma GCC diagnostic pop
         }
 
         enum
@@ -95,8 +107,6 @@ namespace boost
               detail::win32::release_semaphore(semaphores[exclusive_sem],LONG_MAX);
               boost::throw_exception(thread_resource_error());
             }
-            state_data state_={0};
-            state=state_;
         }
 
         ~shared_mutex()
