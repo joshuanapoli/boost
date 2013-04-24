@@ -113,7 +113,15 @@ int print_dec( std::uint32_t x );
 #ifdef BOOST_NO_IOSTREAM
             print( "***** Internal Program Error - assertion (" );
             print( expr );
-            print( ")\n" );
+            print( ") failed in " );
+            print( function );
+            print( ":\n" );
+            print( file );
+            print( "(" );
+            print( line );
+            print( "): " );
+            print( msg );
+            print( "\n" );
 #else
             BOOST_ASSERT_MSG_OSTREAM
               << "***** Internal Program Error - assertion (" << expr << ") failed in "
